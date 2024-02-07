@@ -1,0 +1,2 @@
+fazer um filtro no brightspeed_ELTNTNXA pelo que tem somente dadta de concluçao.
+E com base base nos nome dos brightspeed"_ELTNTNXA" por ex, e com base no proprio nome dessa tabela fazer o filtro de imagens correspondente.
