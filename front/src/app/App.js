@@ -8,18 +8,41 @@ import { FunkyContainer,
   ListContainer,
   PictureContainer,
   ContainerScroll,
-  ContainerImages
+  ContainerImages,
+  ContainerSerach,
+  Container,
+  InputData,
+  InputSerach,
+  Serch,
+  BottonSerch
 } 
 from './style';
 import { useEffect, useState } from 'react';
 import apiService from '../services/api.js';
 import { bool } from 'prop-types';
+import { useRef } from 'react'; 
 
 const App = () => {
   const [service,setservice] = useState([])
   const [work,setwork] = useState([])
   const [files,setfiles] = useState([])
   const [picture,setpicture] = useState([])
+
+  const inputRef = useRef(null);
+  
+  const dataref = useRef(null);
+  
+  const handleChange = () => {
+    const text = inputRef.current.value
+    const seach = files.filter(file => file.nome == text)
+    setfiles(seach)
+  };
+
+  const dataFilter = (event) => {
+    const novaData = event.target.value;  dataCompleta.split('T')
+    const seach = files.filter(file => console.log(file.dataCadastro)  == novaData)
+    setfiles(seach)
+  };
 
   useEffect(() => {
     async function loadStartServicos() {
@@ -40,6 +63,7 @@ const App = () => {
       segundoNivel.style.display = 'none';
     }
     const { data } = await apiService.post('/servicos',{Prop:prop});
+    
     setwork(data)
     }
   }
@@ -52,24 +76,27 @@ const App = () => {
           segundoNivel.style.display = '';
         }
         const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
-        setfiles(data)
+        const SomenteData = data.filter(data => data.dataConclusao != null)
+        console.log("filtrar onde nao tem data de conclusao",SomenteData);
+        setfiles(SomenteData)
       }
     }
     async function loadServicosfoto(ipes,dop) {
       console.log("dop recebido",dop);
-      // if(dop != undefined){
-      //   const segundoNivel = document.getElementById(`${dop}`)
-      //   if(segundoNivel.style.display == 'none' ){
-      //     segundoNivel.style.display = 'flex';
-      //   }else{
-      //     segundoNivel.style.display = 'none';
-      //   }
-      // }
       const { data } = await apiService.post('/servicos/fotos',{Mapa:ipes,Foto:dop});
-        setpicture(data)
+      setpicture(data)
     }
 
-  console.log("dados picture",picture);
+    const keyDownHandler = event => {
+      console.log('User pressed: ', event.key);
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+
+        handleChange()
+      }
+    };
+
   return(
     <FunkyContainer>
        <VibrantBox> 
@@ -86,35 +113,42 @@ const App = () => {
           {/* ---------------------------------------------- */}
           </>
         ))}</QuirkySection>
-
         </>
       ))} 
-
       </VibrantBox>
+      <ContainerSerach>
+        <Container>
+          <InputData type='date' ref={dataref} onChange={dataFilter}></InputData>
+          <Serch>
+            <InputSerach placeholder='Digite algo para pequisar' ref={inputRef} onKeyDown={keyDownHandler}></InputSerach>
+            <BottonSerch onClick={handleChange}><span class="material-symbols-outlined">search</span></BottonSerch>
+          </Serch>
+        </Container>
+        <DynamicWrapper>
+          <ContainerScroll>
+            {work && work.map(wk => (
+            <ItemList id={wk.nome} style={{display: 'none'}}>
+                {files && files.map(file => (
+                  <>
+                  <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
 
+                    {file.nome}
 
-      <DynamicWrapper>
-        <ContainerScroll>
-          {work && work.map(wk => (
-          <ItemList id={wk.nome} style={{display: 'none'}}>
-              {files && files.map(file => (
-                <>
-                <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
-                  {file.nome}
-                </ListContainer>
-                </>
-              ))}
-          </ItemList>
-          ))}
-        </ContainerScroll>
-        <ContainerImages>
-          {picture && picture.map(picture => (
-            <PictureContainer AtrPicture = {picture.foto}>
-              
-            </PictureContainer>
-          ))}
-        </ContainerImages>
-      </DynamicWrapper>
+                  </ListContainer>
+                  </>
+                ))}
+            </ItemList>
+            ))}
+          </ContainerScroll>
+          <ContainerImages>
+            {picture && picture.map(picture => (
+              <PictureContainer $AtrPicture = {picture.foto}>
+
+              </PictureContainer>
+            ))}
+          </ContainerImages>
+        </DynamicWrapper>
+        </ContainerSerach>
     </FunkyContainer>  
   )
 }

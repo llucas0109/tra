@@ -10,7 +10,7 @@ export const FunkyContainer = styled.div`
 `;
 
 export const VibrantBox = styled.div`
-  background-color: lightblue;
+  background-color: #D0D0D0;
   min-width: 300px;
   height: 100%;
 `;
@@ -18,23 +18,21 @@ export const VibrantBox = styled.div`
 export const DynamicWrapper = styled.div`
   background-color: #d0d0d0;
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 70%;
-  margin: 20px;
+  width: 95%;
+  height: 100%;
   overflow: hidden;
 `;
 
 export const QuirkySection = styled.div`
   background-color: #c0c0c0;
-  padding: 25px;
-  margin: 25px;
+  padding: 9px;
+  margin: 0px 25px 16px 25px;
 `;
 
 export const ColorfulPanel = styled.div`
   background-color: #b0b0b0;
-  padding: 30px;
-  margin: 30px;
+  padding: 11px 11px 11px 11px;
+  margin: 7px;
 `;
 export const Servicos = styled.div`
 background-color: gray;
@@ -43,11 +41,11 @@ margin: 10px;
 border-radius: 10px;
 `
 export const ContainerImages = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    height: 241px;
+    background-color: #e5e5e5;
 `
 export const ContainerScroll = styled.div`
   width: 240px;
@@ -57,6 +55,7 @@ export const ItemList = styled.div`
  position: relative;
  flex-direction:column;
  overflow-y: scroll;
+ height: 100%;
 `
 export const ListContainer = styled.div`
   background-color: gray;
@@ -67,7 +66,58 @@ export const ListContainer = styled.div`
 export const PictureContainer = styled.div`
   width: 100px;
   height: 100px;
-  background:  ${(props) => props.AtrPicture ? `${props.AtrPicture}` : 'green' };
+  background: url(${props => props.$AtrPicture ? props.$AtrPicture : 'green'});
+  background-size: cover;
   margin: 10px;
 `
-
+export const ContainerSerach = styled.div`
+width: 95%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color: #252525;
+`
+export const Container = styled.div`
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ height: 100px;
+ width: 95%;
+ margin: 40px 40px 0 40px;
+ background-color: #5b5b5b;
+`
+export const InputData = styled.input`
+  width: 100px;
+  height: 48%;
+  margin: 0px;
+  padding: 0px;
+  outline: none;
+  border: none;
+  background-color: none;
+  margin: 3px;
+  border-radius: 4px;
+`
+export const Serch = styled.div` 
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ height: 40px;
+ margin-right: 10px;
+`
+export const InputSerach = styled.input`
+  width: 200px;
+  height: 100%;
+  margin: 10px 0 10px 10px;
+  border: none;
+  padding-left: 3px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+`
+export const BottonSerch = styled.a`
+  padding: 6px;
+  background-color: #fff;
+  border-left: 1px solid #dbdbdb;
+  border-radius: 0 5px 5px 0;
+`

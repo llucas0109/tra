@@ -55,7 +55,7 @@ class servicos {
     if(Ipes == undefined){
       dados = Prop + '_servicos'
     }else{
-      dados = Prop + '_' + Ipes;
+      dados = Prop + '_' + Ipes + ' where dataConclusao is not null order by dataConclusao desc';  // desk determina que a ordem e contraria da primeira a ultiama.
     }
     console.log("dados de coneçao:  ",dados);
     try {

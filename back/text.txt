@@ -1,2 +1,9 @@
 fazer um filtro no brightspeed_ELTNTNXA pelo que tem somente dadta de concluçao.
 E com base base nos nome dos brightspeed"_ELTNTNXA" por ex, e com base no proprio nome dessa tabela fazer o filtro de imagens correspondente.
+
+
+Criar filtro por nome e data mais atual. 
+
+criar botoes de regeitado pendente e aprovado. vai precisar filtrar do nome da empresa,e do servico_com_empressa os dados. 
+
+espandir a imagem em tela grande colocar um esc de saida e setas laterais par navegaçao.
