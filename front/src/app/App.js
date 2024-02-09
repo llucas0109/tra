@@ -14,19 +14,27 @@ import { FunkyContainer,
   InputData,
   InputSerach,
   Serch,
-  BottonSerch
+  BottonSerch,
+  Expanding,
+  ContenedorExpand,
+  Button
 } 
+
 from './style';
 import { useEffect, useState } from 'react';
 import apiService from '../services/api.js';
 import { bool } from 'prop-types';
 import { useRef } from 'react'; 
+import { Button } from '@mui/material';
 
 const App = () => {
   const [service,setservice] = useState([])
   const [work,setwork] = useState([])
   const [files,setfiles] = useState([])
   const [picture,setpicture] = useState([])
+  const [click,setclick] = useState(0)
+  const [expandimage,setexpandimage] = useState(0)
+  const [contdata,setcontdata] = useState(0)
 
   const inputRef = useRef(null);
   
@@ -38,11 +46,18 @@ const App = () => {
     setfiles(seach)
   };
 
-  const dataFilter = (event) => {
-    const novaData = event.target.value;  dataCompleta.split('T')
-    const seach = files.filter(file => console.log(file.dataCadastro)  == novaData)
-    setfiles(seach)
+   async function dataFilter(ipes) {
+    console.log("contdata   ",contdata);
+    setfiles(contdata)
+    const dataInput = dataref.current.value
+    // const Ipes = ipes.target.value
+    // const { data } = await apiService.post('/servicos/data',{Data:dataInput,Wk:Ipes});
+    // setfiles(data)
   };
+  // if(click != 0 && click != prop ){
+  //   const Nivel = document.getElementById(`${click}`)
+  //   Nivel.style.display == 'none' 
+  // }
 
   useEffect(() => {
     async function loadStartServicos() {
@@ -55,6 +70,10 @@ const App = () => {
 
   async function loadServicos(prop) {
     console.log('prop  ',prop);
+    if(click != 0 && click != prop){
+      const Nivel = document.getElementById(`${click}`)
+      Nivel.style.display = 'none'; 
+    }
     if(prop != undefined){
     const segundoNivel = document.getElementById(`${prop}`)
     if(segundoNivel.style.display == 'none' ){
@@ -63,7 +82,8 @@ const App = () => {
       segundoNivel.style.display = 'none';
     }
     const { data } = await apiService.post('/servicos',{Prop:prop});
-    
+    dataFilter(prop)
+    setclick(prop)
     setwork(data)
     }
   }
@@ -78,6 +98,7 @@ const App = () => {
         const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
         const SomenteData = data.filter(data => data.dataConclusao != null)
         console.log("filtrar onde nao tem data de conclusao",SomenteData);
+        setcontdata(SomenteData)
         setfiles(SomenteData)
       }
     }
@@ -85,6 +106,21 @@ const App = () => {
       console.log("dop recebido",dop);
       const { data } = await apiService.post('/servicos/fotos',{Mapa:ipes,Foto:dop});
       setpicture(data)
+    }
+
+    if(expandimage != 0){ 
+      const img = document.getElementById('expanding')    
+      const ContenedorExpand = document.getElementById('ContenedorExpand')
+      img.style.display = 'block'
+      ContenedorExpand.style.display = 'block'
+    }
+
+    function Close(){
+      const img = document.getElementById('expanding')    
+      const ContenedorExpand = document.getElementById('ContenedorExpand')
+      img.style.display = 'none'
+      ContenedorExpand.style.display = 'none'
+      setexpandimage(0)
     }
 
     const keyDownHandler = event => {
@@ -97,8 +133,14 @@ const App = () => {
       }
     };
 
+
   return(
     <FunkyContainer>
+      <ContenedorExpand id='ContenedorExpand' class="material-symbols-outlined" onClick={() => Close()} >
+        close
+      </ContenedorExpand>
+        <Expanding id='expanding' src={expandimage} />
+            
        <VibrantBox> 
         {service && service.map( ser => (
         <>
@@ -142,11 +184,14 @@ const App = () => {
           </ContainerScroll>
           <ContainerImages>
             {picture && picture.map(picture => (
-              <PictureContainer $AtrPicture = {picture.foto}>
+              <PictureContainer $AtrPicture = {picture.foto} onClick={() => setexpandimage(picture.foto)}>
 
               </PictureContainer>
             ))}
           </ContainerImages>
+          <Button></Button>
+          <Button></Button>
+          <Button></Button>
         </DynamicWrapper>
         </ContainerSerach>
     </FunkyContainer>  

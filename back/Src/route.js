@@ -11,5 +11,6 @@ const rota = new Router()
 rota.get('/servicos', servicos.store)
 rota.post('/servicos', servicos.index)
 rota.post('/servicos/fotos', servicos.picture)
+rota.post('/servicos/data', servicos.data)
 
 export default rota

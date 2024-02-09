@@ -121,3 +121,22 @@ export const BottonSerch = styled.a`
   border-left: 1px solid #dbdbdb;
   border-radius: 0 5px 5px 0;
 `
+export const Expanding = styled.img`
+  display: none;
+  position: absolute;
+  z-index: 1;
+  width: 90%;
+  height: 90%;
+  margin: 10px;
+  box-shadow: 0px 0px 0 100px #000000a8;
+`
+export const ContenedorExpand = styled.span`
+  position: absolute;
+  display: none;
+  width: 100px;
+  height: 100px;
+  background-color: #00000078;
+  z-index: 2;
+  top: 5%;
+  left: 5%;
+`
