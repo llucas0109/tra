@@ -140,3 +140,6 @@ export const ContenedorExpand = styled.span`
   top: 5%;
   left: 5%;
 `
+export const Button =  styled.button`
+
+`

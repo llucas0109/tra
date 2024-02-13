@@ -45,32 +45,31 @@ const [servicoscanais,setservicoscanais] = useState([])
   
   const dataref = useRef(null);
   
-  const Buscador = () => {
+  const handleChange = () => {
     const text = inputRef.current.value
     const seach = files.filter(file => file.nome == text)
     setfiles(seach)
   };
 
-  
    async function dataFilter(ipes) {
-
-    const dataInput = ipes.target.value  // Pegando o Valor do input
-    const DataFilter = files && files.filter(file => {
-      return file.dataConclusao.split('T')[0] == dataInput;
-    });
-    
-    if(DataFilter.length != 0){
-      setfiles(DataFilter)
-    }
-  
+    console.log("contdata   ",contdata);
+    setfiles(contdata)
+    const dataInput = dataref.current.value
+    // const Ipes = ipes.target.value
+    // const { data } = await apiService.post('/servicos/data',{Data:dataInput,Wk:Ipes});
+    // setfiles(data)
   };
-  
+  // if(click != 0 && click != prop ){
+  //   const Nivel = document.getElementById(`${click}`)
+  //   Nivel.style.display == 'none' 
+  // }
+
   useEffect(() => {
     async function loadStartServicos() {
       const { data: canais } = await apiService.get('/servicos');
       setservice(canais); // Atualizando o useState
-      
-      const promises = canais.map(async (service) => {
+
+      const promises = await canais.map(async (service) => {
         console.log("canais:  ",  service.nome);
         const { data: servicos } = await apiService.post('/servicos', { Prop: service.nome });
         return servicos;
@@ -92,7 +91,7 @@ const [servicoscanais,setservicoscanais] = useState([])
   async function loadServicos(prop,index) {
     console.log("Contagem canal :    ", prop);
     console.log("Contagem index :    ", index);
-
+    // const { data } = await apiService.post('/servicos',{Prop:prop});
     if(click != 0 && click != prop){
       const Nivel = document.getElementById(`${click}`)
       Nivel.style.display = 'none'; 
@@ -122,7 +121,6 @@ const [servicoscanais,setservicoscanais] = useState([])
         console.log("filtrar onde nao tem data de conclusao",SomenteData);
         setcontdata(SomenteData)
         setfiles(SomenteData)
-        
       }
     }
     async function loadServicosfoto(ipes,dop) {
@@ -152,7 +150,7 @@ const [servicoscanais,setservicoscanais] = useState([])
       if (event.key === 'Enter') {
         event.preventDefault();
 
-        Buscador()
+        handleChange()
       }
     };
 
@@ -186,7 +184,7 @@ const [servicoscanais,setservicoscanais] = useState([])
           <InputData type='date' ref={dataref} onChange={dataFilter}></InputData>
           <Serch>
             <InputSerach placeholder='Digite algo para pequisar' ref={inputRef} onKeyDown={keyDownHandler}></InputSerach>
-            <BottonSerch onClick={Buscador}><span className="material-symbols-outlined">search</span></BottonSerch>
+            <BottonSerch onClick={handleChange}><span className="material-symbols-outlined">search</span></BottonSerch>
           </Serch>
         </Container>
         <DynamicWrapper>
