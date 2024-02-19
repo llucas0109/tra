@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import { Keymenu } from './styledkey';
 
 export const FunkyContainer = styled.div`
   background-color: red;
@@ -95,7 +96,7 @@ export const PictureContainer = styled.div`
   cursor: pointer;
 `
 export const ContainerSerach = styled.div`
-width: 95%;
+width: 100%;
 height: 100%;
 display: flex;
 flex-direction: column;
@@ -157,14 +158,24 @@ export const BottonSerch = styled.a`
   cursor: pointer;
 
 `
-export const Expanding = styled.img`
+export const Expanding = styled.div`
   display: none;
   position: absolute;
   z-index: 1;
+  background: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
   width: 90%;
   height: 90%;
   margin: 10px;
   box-shadow: 0px 0px 0 100px #000000a8;
+
+  &::after{
+    content: '';
+    display: block;
+    background-color: black;
+  }
 `
 export const ContenedorExpand = styled.span`
   position: absolute;
@@ -229,23 +240,36 @@ export const ExpandContainerscrooll = styled.div`
  }
   
 `
-//-------------------------------------------
-// export const AnimationMenu = keyframes` 
-//     0%{width: 204px} 
-//     100%{width: 0px}
-// `
-// export const AniPostitionMoveFita = keyframes` 
-//     0%{left: 204px} 
-//     100%{left: 0px}
-/* ` */
+//------------Animacoes-------------------------------
+ export const AnimationMenudown = keyframes` 
+  1%{left: 4%} 
+  99%{left: -62%}
+  100%{display: none}
+ `
+ export const AnimationMenuup = keyframes` 
+  1%{left: -62%} 
+  99%{left: 4%}
+  100%{display: block}
+`
+ export const AniPostitionMoveFitadown = keyframes` 
+    0%{left: 60%} 
+    100%{left: -3%}
+`
+export const AniPostitionMoveFitaup = keyframes` 
+    0%{left: -4%} 
+    100%{left: 61%}
+`  
 //-------------------------------------------
 export const Fita = styled.span`
   width: 50px;
   height: 50px;
+  background-color: #D0D0D0;
+  border-left: 1px solid black;
   position: absolute;
   border-radius: 0 10px 10px 0;
   top: 53px;
-  left: 200px;
+  left: 61%;
+  animation: ${(p) => (p.act ? AniPostitionMoveFitadown: AniPostitionMoveFitaup)} forwards 1s;  // forwards mantem as configuracoes do ultimo frame
 `
 
 export const VibrantBox = styled.div`  
@@ -256,10 +280,11 @@ export const VibrantBox = styled.div`
   @media screen and (max-width: 840px){
     display: block;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 200px;
-    
+    width: 59%;
+    top: 10px;
+    border-radius: 10px 10px 0px 0px;
+    left: 2%; 
+    animation: ${(p) => (p.act ? AnimationMenudown: AnimationMenuup)} forwards 1s; // forwards mantem as configuracoes do ultimo frame
   }
 `;
 

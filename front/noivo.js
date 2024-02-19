@@ -53,7 +53,6 @@ const App = () => {
   const [contdata,setcontdata] = useState(0)
   const [indexpicture,setindexpicture] = useState()
   const [pathn8n,setPathn8n] = useState([])
-  const [activebotton,setactivebotton] = useState(false)
 
 
 //----------------- Local onde Sera feito preLoad---------------------
@@ -83,7 +82,7 @@ const App = () => {
       setservicoscanais([...servicoscanais, ...resultadoPromises]);   
     }
 
-    loadStartServicos(); // Chamando a função para que ela possa ser executada
+    loadStartServicos(); // Chamando a funÃ§Ã£o para que ela possa ser executada
   }, []);
 
   
@@ -131,7 +130,7 @@ const App = () => {
   async function loadServicos(prop,index) {
     console.log("Contagem canal :    ", prop);
     console.log("Contagem index :    ", index);
-    setPathn8n([prop]);  // slice(1)  Pega todos os intens que vem depoois da posiçao 1.
+    setPathn8n([prop]);  // slice(1)  Pega todos os intens que vem depoois da posiÃ§ao 1.
     if(click != 0 && click != prop){
       const Nivel = document.getElementById(`${click}`)
       Nivel.style.display = 'none'; 
@@ -249,7 +248,7 @@ const App = () => {
         console.log("ArrowRight or ArrowUp");
         KeyBoardPictureup(indexpicture);
     
-        // Verifique se deve parar de escutar após a execução da lógica
+        // Verifique se deve parar de escutar apÃ³s a execuÃ§Ã£o da lÃ³gica
         console.log("indexpicture    ",indexpicture);
         if (indexpicture >= picture.length) {
           console.log("Deve parar de escutar");
@@ -282,12 +281,33 @@ const App = () => {
       let newarray = pathn8n.splice(3)
       setPathn8n(newarray)
       setPathn8n([...pathn8n,children])
-      Send()
     }
 
     async function Send(children){
 
-      // await apiServicen8n.post('https://webhook.illuminatenet.com/webhook/af8cd7ff-720e-4327-9f44-62d8d177ae4b',{Data:pathn8n})
+       fetch('https://flow.da1click.com/webhook/solvot-Meta', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // Outros cabeçalhos, se necessário
+          },
+          body: JSON.stringify({
+            key1: `${pathn8n}`
+            // Seus dados aqui
+          })
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erro na requisição');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Erro:',error);
+      });
     }
     function Scroll(){
       const ExpandContainerscrooll = document.getElementById("ExpandContainerscrooll");
@@ -303,35 +323,14 @@ const App = () => {
       }
     }
 
-    async function Send(children){
-
-
-      apiService.post('/servicos/sql',{Data:pathn8n})
-
-
-    }
-
-    function actbotton(){
-      const VibrantBox = document.getElementById('VibrantBox')
-      const Fita = document.getElementById('Fita')
-      if(activebotton == true){
-        setactivebotton(false)
-      }else{ 
-      setactivebotton(true)
-      }
-    }
-    console.log('activebotton:',activebotton);
-
   return(
     <>
     <FunkyContainer>
       <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
         close
       </ContenedorExpand>
-        <Expanding id='expanding' $ActivPicture={expandimage}>
-          
-          </Expanding>   
-          <VibrantBox id='VibrantBox' act={activebotton}>
+        <Expanding id='expanding' src={expandimage} />   
+          <VibrantBox id='VibrantBox'>
             {service && service.map( (ser,index) => (
             <>
               <Servicos onClick={() =>loadServicos(ser.nome,index)}>
@@ -350,7 +349,7 @@ const App = () => {
             </>
                   ))} 
           </VibrantBox>
-          <Fita id='Fita' onClick={() => actbotton()} act={activebotton}></Fita>
+          <Fita id='Fita'></Fita>
       <ContainerSerach>
         <Container>
           <Serch>
@@ -391,8 +390,11 @@ const App = () => {
               ))}
             </ContainerImages>
             <ContainerButton>
-              
+              <ButtonGreen onClick={() => Sharedata("Aprovado")}>Aprovado</ButtonGreen>
+              <Button onClick={() => Sharedata("Pendente")}>Pendente</Button>
+              <ButtonRed onClick={() => Sharedata("Negado")}>Negado</ButtonRed>
             </ContainerButton>
+            <ButtonSend onClick={() => Send()}>send</ButtonSend>
             
           </MainImage>
          

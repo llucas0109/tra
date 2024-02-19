@@ -121,7 +121,7 @@ class servicos {
       const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
   
       const query = `SELECT * FROM fotos WHERE mapa = ? AND servico_id = ?`;
-      const [resultados] = await coneccao.query(query, [Mapa, Foto]);
+      const [resultados] = await coneccao.promise().query(query, [Mapa, Foto]);
   
       let ArrayResult = [];
   
@@ -143,5 +143,59 @@ class servicos {
     }
   }
   
+  async sql(request, response) {
+    const {Data} = request.body
+    
+    console.log("Dados recebidos dddddata ", Data);
+    fetch('https://webhook.illuminatenet.com/webhook/af8cd7ff-720e-4327-9f44-62d8d177ae4b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+          // Outros cabeçalhos, se necessário
+        },
+        body: JSON.stringify({  // array
+          Data: Data
+          // Seus dados aqui
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Resposta da requisição:', data);
+      })
+      .catch(error => {
+        console.error('Erro na requisição:', error);
+      });
+  }
+
+  async status(request, response) {
+    const { Url, Status } = request.body; 
+  
+    console.log("Wk, DataInput :   ", Wk, DataInput);
+  
+    try {
+      const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
+  
+      const query = `SELECT * FROM ${Wk} WHERE dataConclusao = ?`;
+      const [resultados] = await coneccao.query(query, [DataInput]);
+  
+      let ArrayResult = [];
+  
+      resultados.forEach(resultado => {
+        console.log(resultado.nome);
+        console.log(resultado.dataCriacao);
+  
+        if (typeof resultado !== 'undefined') {
+          ArrayResult.push(resultado);
+        }
+      });
+  
+      console.log("ArrayResult", typeof ArrayResult);
+      coneccao.end();
+      return response.send(ArrayResult);
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+      return response.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
 }
 export default new servicos();

@@ -12,5 +12,7 @@ rota.get('/servicos', servicos.store)
 rota.post('/servicos', servicos.index)
 rota.post('/servicos/fotos', servicos.picture)
 rota.post('/servicos/data', servicos.data)
+rota.post('/servicos/sql', servicos.sql)
+rota.post('/servicos/fotos/status', servicos.status)
 
 export default rota
