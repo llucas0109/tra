@@ -18,15 +18,23 @@ import { FunkyContainer,
   Expanding,
   ContenedorExpand,
   ContainerButton,
-  Button,
   MainImage,
-  ButtonGreen,
-  ButtonRed,
   ButtonSend,
   Error,
+  ButtonContenedor,
+  BoxText,
+  BoxDiv,
   InitContainerScroll,
   ExpandContainerscrooll,
+  ContenedorData,
+  ButtonPendente,
+  ButtonGreen,
+  ButtonRed,
   Fita,
+  Box,
+  CloseCommit,
+  StyledResizableTextarea,
+  ButtonS,
   Menu
 } from './style';
 
@@ -62,7 +70,7 @@ const App = () => {
 //--------------------------------------------------------------------------
 
   const inputRef = useRef(null);
-  const dataref = useRef(null);
+  const areatextref = useRef(null);
   
  
   useEffect(() => {
@@ -302,13 +310,13 @@ const App = () => {
         }
       }
     }
-
     async function Send(children){
-
-
       apiService.post('/servicos/sql',{Data:pathn8n})
-
-
+    }
+    async function SendCommit(children){
+      const text = areatextref.current.value
+      console.log("text       ",text);   
+      apiService.post('/servicos/commit',{Commit:text})
     }
 
     function actbotton(){
@@ -320,6 +328,19 @@ const App = () => {
       setactivebotton(true)
       }
     }
+
+    function CloseCommitfunctin(){
+      const BoxDiv = document.getElementById('BoxDiv')
+      BoxDiv.style.display = 'none'
+    }
+    function OpenCommitfunctin(){
+      const BoxDiv = document.getElementById('BoxDiv')
+      BoxDiv.style.display = 'flex'
+    }
+    function TextBox(childrem){
+      
+    }
+
     console.log('activebotton:',activebotton);
 
   return(
@@ -330,7 +351,18 @@ const App = () => {
       </ContenedorExpand>
         <Expanding id='expanding' $ActivPicture={expandimage}>
           
-          </Expanding>   
+          </Expanding>
+            <BoxDiv id='BoxDiv'>
+              <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin()} >
+                close
+              </CloseCommit>
+              <BoxText id='BoxText'>
+                Commit
+              </BoxText>
+              <Box ref={areatextref}>
+              </Box>
+              <ButtonSend onClick={() => SendCommit()}>Send</ButtonSend>
+            </BoxDiv>
           <VibrantBox id='VibrantBox' act={activebotton}>
             {service && service.map( (ser,index) => (
             <>
@@ -359,30 +391,32 @@ const App = () => {
           </Serch>
         </Container>
         <DynamicWrapper>
-          <InitContainerScroll>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}  >
-              <DatePicker label="Data" onChange={dataFilter} />
-            </DemoContainer>
-          </LocalizationProvider>
-          </InitContainerScroll>
-          <ExpandContainerscrooll id='ExpandContainerscrooll' onClick={() => Scroll()}></ExpandContainerscrooll>
-          <ContainerScroll id='ContainerScroll'>
-            {work && work.map(wk => (
-            <ItemList id={wk.nome} style={{display: 'none'}}>
-              <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
-                {files && files.map(file => (
-                  <>
-                  <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
+          <ContenedorData>
+            <InitContainerScroll>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']}  >
+                <DatePicker label="Data" onChange={dataFilter} />
+              </DemoContainer>
+            </LocalizationProvider>
+            </InitContainerScroll>
+            <ExpandContainerscrooll id='ExpandContainerscrooll' onClick={() => Scroll()}></ExpandContainerscrooll>
+            <ContainerScroll id='ContainerScroll'>
+              {work && work.map(wk => (
+              <ItemList id={wk.nome} style={{display: 'none'}}>
+                <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
+                  {files && files.map(file => (
+                    <>
+                    <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
 
-                    {file.nome}
+                      {file.nome}
 
-                  </ListContainer>
-                  </>
-                ))}
-            </ItemList>
-            ))}
-          </ContainerScroll>
+                    </ListContainer>
+                    </>
+                  ))}
+              </ItemList>
+              ))}
+            </ContainerScroll>
+          </ContenedorData>
           <MainImage>
             <ContainerImages>
               {picture && picture.map(picture => ( 
@@ -391,9 +425,22 @@ const App = () => {
               ))}
             </ContainerImages>
             <ContainerButton>
-              
-            </ContainerButton>
+              <ButtonGreen variant="contained"  disableElevation>
+                Approved
+              </ButtonGreen>
             
+              <ButtonPendente onClick={() => OpenCommitfunctin()} variant="contained" disableElevation>
+                Pending
+              </ButtonPendente>
+            
+              <ButtonRed onClick={() => OpenCommitfunctin()} variant="contained" disableElevation>
+                Disapproved
+              </ButtonRed>
+            
+              {/* <ButtonGreen onClick={() => Sharedata("Aprovado")}>Approved</ButtonGreen>
+              <Button onClick={() => Sharedata("Pendente")}>Pending</Button>
+              <ButtonRed onClick={() => Sharedata("Reprovado")}>Disapproved</ButtonRed> */}
+            </ContainerButton>
           </MainImage>
          
         </DynamicWrapper>

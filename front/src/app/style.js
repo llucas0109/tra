@@ -1,6 +1,38 @@
 import styled, { keyframes } from 'styled-components';
 import { Keymenu } from './styledkey';
+import Button from '@mui/material/Button';
 
+export const ButtonGreen = styled(Button)`
+  && { // temos colocar && para alterar cor e outras coidsa do styled components
+    background-color: #16cf16;
+    height: 61px;   
+    width: 110px ;
+  }
+  &&:hover{  // temos colocar && para alterar cor e outras coidsa do styled components
+    background-color: green;
+  }
+`
+export const ButtonRed = styled(Button)`
+  && { // temos colocar && para alterar cor e outras coidsa do styled components
+    background-color: red; 
+    height: 61px;
+    width: 110px ;
+  }
+  &&:hover{
+    background-color: #d10000;
+  }
+`
+
+export const ButtonPendente = styled(Button)`
+  && { // temos colocar && para alterar cor e outras coidsa do styled components
+    background-color: #cfcf04;
+    height: 61px; 
+    width: 110px ;
+  }
+  &&:hover{
+    background-color: #abab05;
+  }
+`
 export const FunkyContainer = styled.div`
   background-color: red;
   width: 100vw;
@@ -192,43 +224,48 @@ export const ContenedorExpand = styled.span`
   }
 `
 export const ContainerButton =  styled.div`
-  width: 100%;
-  height: 15%;
+  position: absolute;
+  justify-content: center;
+  gap: 1vw;
+  width: 31%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  justify-content: center;
+  top: 71%;
 
   @media screen and (max-width: 840px) { 
     margin: 7px 0;
   }
 `
-export const Button =  styled.button`
-  width: 30%;
-  height: 60px;
-  background-color: aliceblue;
-  outline: none;
-  margin: 1%;
-
-  border: 2px solid black;
+export const ButtonContenedor =  styled.div`
+  width: 111px;
+  height: 50px;
   
 `
-export const ButtonSend =  styled(Button)`
-  width: 90%;
-  height: 50px;
+export const ButtonSend =  styled.button`
+  position: absolute;
+  width: 91%;
+  border-radius: 10px 10px 10px 10px;
+  top: 81%;
+  height: 70px;
+
+  &:active{
+    background-color: black;
+  }
 `
-export const ButtonGreen =  styled(Button)`
-  background-color: green;
-`
-export const ButtonRed =  styled(Button)`
-  background-color: red;
-`
+
 export const Error =  styled.p`
   display: none;
   color: red;
   font-size: 13px;
   
 `
+export const ContenedorData = styled.div`
+
+`
 export const InitContainerScroll = styled.div`
-  height: 117px;
+  height: 70px;
   margin: 5px;
 `
 export const ExpandContainerscrooll = styled.div`
@@ -274,7 +311,7 @@ export const Fita = styled.span`
 
 export const VibrantBox = styled.div`  
   background-color: #D0D0D0;
-  width: 300px;
+  min-width: 300px;
   height: 100%;
 
   @media screen and (max-width: 840px){
@@ -301,4 +338,43 @@ export const Menu = styled.div`
     left: 0px;
     
   }
+`
+export const BoxDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  border: 1px solid #1565C0;
+  z-index: 1;
+  height: 50%;
+  width: 25%;
+  border-radius: 10px 10px 10PX 10PX;
+`
+export const BoxText = styled.div`
+  width: 100%;
+  border: 1px solid #1565C0;
+  border-radius: 10px 10px 0px 0px;
+  text-align: center;
+`
+export const Box = styled.textarea` //uma caixa de texto
+  outline: none;
+  border-radius: 0px 0px 10px 10px;
+  height: 100%;
+  width: 100%;
+  border: 1px solid #1565C0;
+  resize: none; /* Impede a redimensionamento manual do textarea */
+  overflow-y: hidden; /* Impede a exibição de barras de rolagem */
+  box-sizing: border-box; 
+  font-size: 30px;
+  padding: 7px 0px  0px 7px;
+  &:active{
+    border: 1px solid #1567b1;
+  }
+`
+export const CloseCommit = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0%;
+  left: 0%;
 `

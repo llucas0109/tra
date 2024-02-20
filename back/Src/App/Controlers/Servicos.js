@@ -166,17 +166,20 @@ class servicos {
         console.error('Erro na requisição:', error);
       });
   }
-
-  async status(request, response) {
-    const { Url, Status } = request.body; 
+  async commit(request, response) {
+    const { Mapa, Foto, Commit } = request.body;
   
-    console.log("Wk, DataInput :   ", Wk, DataInput);
+    console.log("Dados recebidos Mapa", Mapa);
+    console.log("Dados recebidos Foto", Foto);
+    console.log("Foto a procurar", Mapa + Foto);
+
+    console.log("Commit      ",Commit);
   
     try {
       const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
   
-      const query = `SELECT * FROM ${Wk} WHERE dataConclusao = ?`;
-      const [resultados] = await coneccao.query(query, [DataInput]);
+      const query = `SELECT * FROM fotos WHERE mapa = ? AND servico_id = ?`;
+      const [resultados] = await coneccao.promise().query(query, [Mapa, Foto]);
   
       let ArrayResult = [];
   
@@ -189,7 +192,7 @@ class servicos {
         }
       });
   
-      console.log("ArrayResult", typeof ArrayResult);
+      console.log("ArrayResult", ArrayResult);
       coneccao.end();
       return response.send(ArrayResult);
     } catch (error) {
@@ -197,5 +200,6 @@ class servicos {
       return response.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
+
 }
 export default new servicos();
