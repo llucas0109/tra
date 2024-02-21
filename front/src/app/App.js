@@ -188,6 +188,8 @@ const App = () => {
   }
     async function loadServicosfoto(ipes,dop) {
       let newarray = pathn8n.splice(2)
+      setactivebotton(true)
+      actbotton()
       setPathn8n(newarray)
       setPathn8n([...pathn8n,dop])
       console.log("dop recebido",dop);
@@ -249,6 +251,9 @@ const App = () => {
     // console.log("indexpicture    ",indexpicture,"    picture.length      ",picture.length);
     
     function up(event) {
+      const bigimg = document.getElementById('expanding')
+      if(bigimg.style.display == 'block'){ 
+
       if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
         console.log("ArrowLeft or ArrowDown");
         KeyBoardPicturedown(indexpicture)
@@ -263,13 +268,14 @@ const App = () => {
           console.log("Deve parar de escutar");
         }
       }
+      }
     }
     
-    keyboard.bind('up', up);
-    keyboard.bind('down', up);
-    keyboard.bind('left', up);
-    keyboard.bind('right', up);
-
+      keyboard.bind('up', up);
+      keyboard.bind('down', up);
+      keyboard.bind('left', up);
+      keyboard.bind('right', up);
+    
     if (expandimage != 0) {
       console.log("Continua entrando ");
       const img = document.getElementById('expanding');
@@ -353,12 +359,14 @@ const App = () => {
           
           </Expanding>
             <BoxDiv id='BoxDiv'>
-              <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin()} >
-                close
-              </CloseCommit>
-              <BoxText id='BoxText'>
-                Commit
-              </BoxText>
+              <div>
+                <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin()} >
+                  close
+                </CloseCommit>
+                <BoxText id='BoxText'>
+                  Commit
+                </BoxText>
+              </div>
               <Box ref={areatextref}>
               </Box>
               <ButtonSend onClick={() => SendCommit()}>Send</ButtonSend>
@@ -441,8 +449,7 @@ const App = () => {
               <Button onClick={() => Sharedata("Pendente")}>Pending</Button>
               <ButtonRed onClick={() => Sharedata("Reprovado")}>Disapproved</ButtonRed> */}
             </ContainerButton>
-          </MainImage>
-         
+          </MainImage> 
         </DynamicWrapper>
         </ContainerSerach>
     </FunkyContainer> 

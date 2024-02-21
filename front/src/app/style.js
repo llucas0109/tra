@@ -232,7 +232,7 @@ export const ContainerButton =  styled.div`
   justify-content: center;
   align-items: center;
   justify-content: center;
-  top: 71%;
+  top: 81%;
 
   @media screen and (max-width: 840px) { 
     margin: 7px 0;
@@ -244,7 +244,6 @@ export const ButtonContenedor =  styled.div`
   
 `
 export const ButtonSend =  styled.button`
-  position: absolute;
   width: 91%;
   border-radius: 10px 10px 10px 10px;
   top: 81%;
@@ -279,21 +278,21 @@ export const ExpandContainerscrooll = styled.div`
 `
 //------------Animacoes-------------------------------
  export const AnimationMenudown = keyframes` 
-  1%{left: 4%} 
-  99%{left: -62%}
+  1%{left: 2%} 
+  99%{left: -61%}
   100%{display: none}
  `
  export const AnimationMenuup = keyframes` 
-  1%{left: -62%} 
-  99%{left: 4%}
+  1%{left: -61%} 
+  99%{left: 2%}
   100%{display: block}
 `
  export const AniPostitionMoveFitadown = keyframes` 
-    0%{left: 60%} 
+    0%{left: 61%} 
     100%{left: -3%}
 `
 export const AniPostitionMoveFitaup = keyframes` 
-    0%{left: -4%} 
+    0%{left: -3%} 
     100%{left: 61%}
 `  
 //-------------------------------------------
@@ -314,6 +313,7 @@ export const VibrantBox = styled.div`
   min-width: 300px;
   height: 100%;
 
+
   @media screen and (max-width: 840px){
     display: block;
     position: absolute;
@@ -322,6 +322,9 @@ export const VibrantBox = styled.div`
     border-radius: 10px 10px 0px 0px;
     left: 2%; 
     animation: ${(p) => (p.act ? AnimationMenudown: AnimationMenuup)} forwards 1s; // forwards mantem as configuracoes do ultimo frame
+  }
+  @media screen and (max-width: 550px){
+    min-width: 59%;
   }
 `;
 
@@ -341,6 +344,7 @@ export const Menu = styled.div`
 `
 export const BoxDiv = styled.div`
   display: flex;
+  background-color: #fff;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -348,7 +352,7 @@ export const BoxDiv = styled.div`
   border: 1px solid #1565C0;
   z-index: 1;
   height: 50%;
-  width: 25%;
+  width: 300px;
   border-radius: 10px 10px 10PX 10PX;
 `
 export const BoxText = styled.div`
@@ -359,10 +363,8 @@ export const BoxText = styled.div`
 `
 export const Box = styled.textarea` //uma caixa de texto
   outline: none;
-  border-radius: 0px 0px 10px 10px;
   height: 100%;
   width: 100%;
-  border: 1px solid #1565C0;
   resize: none; /* Impede a redimensionamento manual do textarea */
   overflow-y: hidden; /* Impede a exibição de barras de rolagem */
   box-sizing: border-box; 
