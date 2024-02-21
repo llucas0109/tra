@@ -7,7 +7,12 @@ export const ButtonGreen = styled(Button)`
     background-color: #16cf16;
     height: 61px;   
     width: 110px ;
+
+    @media screen and (max-width: 350px) {
+     font-size: 10px;
+    }
   }
+  
   &&:hover{  // temos colocar && para alterar cor e outras coidsa do styled components
     background-color: green;
   }
@@ -16,7 +21,10 @@ export const ButtonRed = styled(Button)`
   && { // temos colocar && para alterar cor e outras coidsa do styled components
     background-color: red; 
     height: 61px;
-    width: 110px ;
+    width: 110px;
+    @media screen and (max-width: 350px) {
+     font-size: 10px;
+    }
   }
   &&:hover{
     background-color: #d10000;
@@ -27,7 +35,10 @@ export const ButtonPendente = styled(Button)`
   && { // temos colocar && para alterar cor e outras coidsa do styled components
     background-color: #cfcf04;
     height: 61px; 
-    width: 110px ;
+    width: 110px;
+    @media screen and (max-width: 350px) {
+     font-size: 10px;
+    }
   }
   &&:hover{
     background-color: #abab05;
@@ -102,7 +113,7 @@ export const ContainerScroll = styled.div`
   width: 240px;
   height: 100%;
   @media screen and (max-width: 840px) {
-    height: 35%;
+    height: 65%;
     width: 100%;
   } 
 `
@@ -193,13 +204,14 @@ export const BottonSerch = styled.a`
 export const Expanding = styled.div`
   display: none;
   position: absolute;
-  z-index: 1;
+  width: 90%;
+  height: 90%;
+  z-index: 3;
   background: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
-  width: 90%;
-  height: 90%;
+  border: 1px solid black;
   margin: 10px;
   box-shadow: 0px 0px 0 100px #000000a8;
 
@@ -218,7 +230,8 @@ export const ContenedorExpand = styled.span`
   top: 5%;
   left: 5%;
   cursor: pointer;
-
+  top: 140px;
+  left: 30px;
   &:hover{
     
   }
@@ -227,7 +240,7 @@ export const ContainerButton =  styled.div`
   position: absolute;
   justify-content: center;
   gap: 1vw;
-  width: 31%;
+  width: 38%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -236,7 +249,10 @@ export const ContainerButton =  styled.div`
 
   @media screen and (max-width: 840px) { 
     margin: 7px 0;
+    width: 90%;
   }
+
+  
 `
 export const ButtonContenedor =  styled.div`
   width: 111px;
@@ -248,9 +264,14 @@ export const ButtonSend =  styled.button`
   border-radius: 10px 10px 10px 10px;
   top: 81%;
   height: 70px;
-
-  &:active{
+  border: none;
+  margin: 5px 0px 5px 0px;
+  
+  &::selection{
     background-color: black;
+  }
+  &:hover{
+    background-color: #00000054;
   }
 `
 
@@ -261,7 +282,10 @@ export const Error =  styled.p`
   
 `
 export const ContenedorData = styled.div`
-
+   
+   @media screen and (max-width: 840px) {
+      height: 350px;
+   }
 `
 export const InitContainerScroll = styled.div`
   height: 70px;
@@ -289,7 +313,7 @@ export const ExpandContainerscrooll = styled.div`
 `
  export const AniPostitionMoveFitadown = keyframes` 
     0%{left: 61%} 
-    100%{left: -3%}
+    100%{left: -2.5%}
 `
 export const AniPostitionMoveFitaup = keyframes` 
     0%{left: -3%} 
@@ -297,22 +321,29 @@ export const AniPostitionMoveFitaup = keyframes`
 `  
 //-------------------------------------------
 export const Fita = styled.span`
-  width: 50px;
-  height: 50px;
-  background-color: #D0D0D0;
-  border-left: 1px solid black;
-  position: absolute;
-  border-radius: 0 10px 10px 0;
-  top: 53px;
-  left: 61%;
-  animation: ${(p) => (p.act ? AniPostitionMoveFitadown: AniPostitionMoveFitaup)} forwards 1s;  // forwards mantem as configuracoes do ultimo frame
+  display: none;
+  z-index: 2;
+  @media screen and (max-width: 840px) { 
+    display: block;
+    width: 50px;
+    height: 50px;
+    background-color: #D0D0D0;
+    border-left: 1px solid black;
+    position: absolute;
+    border-radius: 0 10px 10px 0;
+    padding-left: 3px;    
+    top: 53px;
+    left: 61%;
+    animation: ${(p) => (p.act ? AniPostitionMoveFitadown: AniPostitionMoveFitaup)} forwards 1s;  // forwards mantem as configuracoes do ultimo frame
+  }  
 `
 
 export const VibrantBox = styled.div`  
   background-color: #D0D0D0;
   min-width: 300px;
   height: 100%;
-
+  display: block;
+  z-index: 2;
 
   @media screen and (max-width: 840px){
     display: block;
@@ -357,7 +388,9 @@ export const BoxDiv = styled.div`
 `
 export const BoxText = styled.div`
   width: 100%;
-  border: 1px solid #1565C0;
+  font-size: 19px;
+  font-weight: 700;
+  padding-bottom: 5px;
   border-radius: 10px 10px 0px 0px;
   text-align: center;
 `
@@ -379,4 +412,49 @@ export const CloseCommit = styled.span`
   cursor: pointer;
   top: 0%;
   left: 0%;
+`
+export const LastCommit = styled.div` 
+  height: 330px;
+  width: 90%;
+  border: 1px solid black;
+` 
+export const PopCommit = styled.span`
+  background-color: #fff;
+  cursor: pointer;
+  width: 96px;
+  height: 31px;
+  border-radius: 15px 15px 15px 15px;
+  align-self: flex-end;
+  font-size: 15px;
+  text-align: center;
+  padding: 6px;
+  margin-bottom: 3px;
+  border: 1px solid #284c57;
+  box-shadow: 1px 1px 1px #00000094;
+
+  &:hover{
+    opacity: 0.8;
+  }
+  &:active{
+    opacity: 0.5;
+  }
+`
+export const BottonCommit = styled.div`
+  position: absolute;
+  justify-content: center;
+  gap: 1vw;
+  width: 38%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  top: 81%;
+
+
+  @media screen and (max-width: 840px) { 
+    margin: 7px 0;
+    width: 90%;
+    font-size: 10px;
+  }
 `

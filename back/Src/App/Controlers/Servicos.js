@@ -167,34 +167,19 @@ class servicos {
       });
   }
   async commit(request, response) {
-    const { Mapa, Foto, Commit } = request.body;
+    const { Conect, Commit } = request.body;
   
-    console.log("Dados recebidos Mapa", Mapa);
-    console.log("Dados recebidos Foto", Foto);
-    console.log("Foto a procurar", Mapa + Foto);
+    console.log("Dados recebidos Conect", Conect);
+    console.log("Dados recebidos Commit", Commit);
 
-    console.log("Commit      ",Commit);
+    let dados = Conect[0] + '_' + Conect[1];
+  
+    console.log("dados de conexão:  ", dados);
   
     try {
       const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
   
-      const query = `SELECT * FROM fotos WHERE mapa = ? AND servico_id = ?`;
-      const [resultados] = await coneccao.promise().query(query, [Mapa, Foto]);
-  
-      let ArrayResult = [];
-  
-      resultados.forEach(resultado => {
-        console.log(resultado.nome);
-        console.log(resultado.dataCriacao);
-  
-        if (typeof resultado !== 'undefined') {
-          ArrayResult.push(resultado);
-        }
-      });
-  
-      console.log("ArrayResult", ArrayResult);
-      coneccao.end();
-      return response.send(ArrayResult);
+      const query = `update ${dados} set commit = '${Commit}' where nome = '${Conect[2]}'`;
     } catch (error) {
       console.error('Erro inesperado:', error);
       return response.status(500).json({ error: 'Erro interno do servidor' });

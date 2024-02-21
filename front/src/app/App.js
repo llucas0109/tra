@@ -21,17 +21,20 @@ import { FunkyContainer,
   MainImage,
   ButtonSend,
   Error,
+  LastCommit,
   ButtonContenedor,
   BoxText,
   BoxDiv,
   InitContainerScroll,
   ExpandContainerscrooll,
   ContenedorData,
+  PopCommit,
   ButtonPendente,
   ButtonGreen,
   ButtonRed,
   Fita,
   Box,
+  BottonCommit,
   CloseCommit,
   StyledResizableTextarea,
   ButtonS,
@@ -61,14 +64,16 @@ const App = () => {
   const [contdata,setcontdata] = useState(0)
   const [indexpicture,setindexpicture] = useState()
   const [pathn8n,setPathn8n] = useState([])
-  const [activebotton,setactivebotton] = useState(false)
+  const [activebotton,setactivebotton] = useState(true)
+  const [pasta,setpasta] = useState([])
+  const [textcommit,settextcommit] = useState('')
 
 
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
   const [patch,setpatch] = useState([])
 //--------------------------------------------------------------------------
-
+  
   const inputRef = useRef(null);
   const areatextref = useRef(null);
   
@@ -159,7 +164,7 @@ const App = () => {
   async function loadServicoswk(prop,ipes) {
     let newarray = pathn8n.splice(1)
     setPathn8n(newarray)
-
+    actbotton()
     if(ipes != undefined){
       setPathn8n([...pathn8n,ipes]);
       const segundoNivel = document.getElementById(`${ipes}`)
@@ -169,6 +174,7 @@ const App = () => {
         segundoNivel.style.display = '';
       }
       const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
+      setpasta(data)
       const SomenteData = data.filter(data => data.dataConclusao != null)
       console.log("filtrar onde nao tem data de conclusao",SomenteData);
       setcontdata(SomenteData)
@@ -181,30 +187,27 @@ const App = () => {
       const VibrantBox = document.getElementById('VibrantBox')
       const Fita = document.getElementById('Fita')
       // Fita.style.animation = `${AniPostitionMoveFita} 2s ease`
-      ContainerScroll.style.display = 'block'
-      VibrantBox.style.display = 'none'
     }
 
   }
     async function loadServicosfoto(ipes,dop) {
       let newarray = pathn8n.splice(2)
-      setactivebotton(true)
-      actbotton()
       setPathn8n(newarray)
       setPathn8n([...pathn8n,dop])
       console.log("dop recebido",dop);
       const { data } = await apiService.post('/servicos/fotos',{Mapa:ipes,Foto:dop});
       setpicture(data)
+      
+      const text = pasta.filter((text) => text.nome == dop)
+      settextcommit(text[0].commit)
 
-      console.log("window.screen.width  ",  window.innerWidth)
       if(window.innerWidth < 840){
         const ExpandContainerscrooll = document.getElementById("ExpandContainerscrooll");
         const ContainerScroll = document.getElementById('ContainerScroll')
         ContainerScroll.style.display = 'none'
-        ExpandContainerscrooll.style.display = 'block'
       }
     }
-
+    console.log('textcommit         ',textcommit);
     function FildIndexPicture(img){
       setexpandimage(img)
       const index = picture.findIndex(picture => picture.foto === img)
@@ -292,17 +295,12 @@ const App = () => {
       ContenedorExpand.style.display = 'none'
       setexpandimage(0)
     }
-    function Sharedata(children){
-      let newarray = pathn8n.splice(3)
-      setPathn8n(newarray)
-      setPathn8n([...pathn8n,children])
+    function Sharedata(){
       Send()
+      SendCommit()
     }
 
-    async function Send(children){
-
-      // await apiServicen8n.post('https://webhook.illuminatenet.com/webhook/af8cd7ff-720e-4327-9f44-62d8d177ae4b',{Data:pathn8n})
-    }
+    
     function Scroll(){
       const ExpandContainerscrooll = document.getElementById("ExpandContainerscrooll");
       const ContainerScroll = document.getElementById("ContainerScroll");
@@ -316,13 +314,14 @@ const App = () => {
         }
       }
     }
-    async function Send(children){
+    async function Send(){
       apiService.post('/servicos/sql',{Data:pathn8n})
     }
-    async function SendCommit(children){
+    async function SendCommit(){
       const text = areatextref.current.value
-      console.log("text       ",text);   
-      apiService.post('/servicos/commit',{Commit:text})
+      console.log("text   ",text); 
+      console.log("pathn8n   " ,pathn8n);
+      await apiService.post('/servicos/commit',{Conect: pathn8n , Commit:text})
     }
 
     function actbotton(){
@@ -335,32 +334,34 @@ const App = () => {
       }
     }
 
-    function CloseCommitfunctin(){
-      const BoxDiv = document.getElementById('BoxDiv')
+    function CloseCommitfunctin(id){
+      const BoxDiv = document.getElementById(`${id}`)
       BoxDiv.style.display = 'none'
     }
-    function OpenCommitfunctin(){
-      const BoxDiv = document.getElementById('BoxDiv')
+    function OpenCommitfunctin(id){
+      const BoxDiv = document.getElementById(`${id}`)
       BoxDiv.style.display = 'flex'
     }
     function TextBox(childrem){
-      
+      console.log("TextBox     ", childrem);
+      let newarray = pathn8n.splice(3)
+      setPathn8n(newarray)
+      setPathn8n([...pathn8n,childrem])
     }
 
-    console.log('activebotton:',activebotton);
-
+    // console.log('textcommit.nome:      ',textcommit[0].commit);
+    console.log("pathn8n       ",pathn8n);
   return(
     <>
     <FunkyContainer>
-      <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
-        close
-      </ContenedorExpand>
         <Expanding id='expanding' $ActivPicture={expandimage}>
-          
-          </Expanding>
+          <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
+          close
+          </ContenedorExpand>
+        </Expanding>
             <BoxDiv id='BoxDiv'>
               <div>
-                <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin()} >
+                <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxDiv')} >
                   close
                 </CloseCommit>
                 <BoxText id='BoxText'>
@@ -369,7 +370,7 @@ const App = () => {
               </div>
               <Box ref={areatextref}>
               </Box>
-              <ButtonSend onClick={() => SendCommit()}>Send</ButtonSend>
+              <ButtonSend onClick={() => Sharedata('Send')}>Send</ButtonSend>
             </BoxDiv>
           <VibrantBox id='VibrantBox' act={activebotton}>
             {service && service.map( (ser,index) => (
@@ -407,7 +408,6 @@ const App = () => {
               </DemoContainer>
             </LocalizationProvider>
             </InitContainerScroll>
-            <ExpandContainerscrooll id='ExpandContainerscrooll' onClick={() => Scroll()}></ExpandContainerscrooll>
             <ContainerScroll id='ContainerScroll'>
               {work && work.map(wk => (
               <ItemList id={wk.nome} style={{display: 'none'}}>
@@ -415,9 +415,7 @@ const App = () => {
                   {files && files.map(file => (
                     <>
                     <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
-
                       {file.nome}
-
                     </ListContainer>
                     </>
                   ))}
@@ -432,23 +430,39 @@ const App = () => {
                 </PictureContainer>
               ))}
             </ContainerImages>
-            <ContainerButton>
-              <ButtonGreen variant="contained"  disableElevation>
-                Approved
-              </ButtonGreen>
-            
-              <ButtonPendente onClick={() => OpenCommitfunctin()} variant="contained" disableElevation>
-                Pending
-              </ButtonPendente>
-            
-              <ButtonRed onClick={() => OpenCommitfunctin()} variant="contained" disableElevation>
-                Disapproved
-              </ButtonRed>
-            
-              {/* <ButtonGreen onClick={() => Sharedata("Aprovado")}>Approved</ButtonGreen>
-              <Button onClick={() => Sharedata("Pendente")}>Pending</Button>
-              <ButtonRed onClick={() => Sharedata("Reprovado")}>Disapproved</ButtonRed> */}
-            </ContainerButton>
+            <BoxDiv id='BoxLastCommit'>
+              <div>
+                <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxLastCommit')} >
+                  close
+                </CloseCommit>
+                <BoxText>
+                  Last Commit
+                </BoxText>
+              </div>
+              <LastCommit>
+                {textcommit}
+              </LastCommit>
+            </BoxDiv>
+            <BottonCommit>
+              <PopCommit onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
+              <ContainerButton>
+                <ButtonGreen  onClick={() => TextBox("Aprovado") } variant="contained"  disableElevation>
+                  Approved
+                </ButtonGreen>
+              
+                <ButtonPendente onClick={() => {TextBox("Pendente"); return OpenCommitfunctin('BoxDiv')}} variant="contained" disableElevation>
+                  Pending
+                </ButtonPendente>
+              
+                <ButtonRed onClick={() => {TextBox("Reprovado"); return OpenCommitfunctin('BoxDiv')}} variant="contained" disableElevation>
+                  Disapproved
+                </ButtonRed>
+              
+                {/* <ButtonGreen onClick={() => Sharedata("Aprovado")}>Approved</ButtonGreen>
+                <Button onClick={() => Sharedata("Pendente")}>Pending</Button>
+                <ButtonRed onClick={() => Sharedata("Reprovado")}>Disapproved</ButtonRed> */}
+              </ContainerButton>
+            </BottonCommit>
           </MainImage> 
         </DynamicWrapper>
         </ContainerSerach>
