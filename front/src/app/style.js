@@ -1,7 +1,44 @@
 import styled, { keyframes } from 'styled-components';
 import { Keymenu } from './styledkey';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
+export const BoxLoad = styled(Box)`
+  &&{
+    display: ${prop => prop.$act? 'none' : 'block' };
+    position: absolute;
+    z-index: 4;
+  }
+`
+export const FundoLoad = styled.div`
+  display: ${prop => prop.$act? 'none' : 'block' };
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff75;
+  position: absolute;
+  z-index: 3;
+`
+export const FundoLoadImg = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff73;
+  position: absolute;
+  z-index: 3;
+  display: none;
+
+`
+export const BoxLoadImg = styled(Box)`
+  &&{
+    /* display: ${prop => prop.$act? 'none' : 'block' }; */
+    position: absolute;
+    display: none;
+    z-index: 4;
+  }
+`
+export const LoadCircularProgress = styled(CircularProgress)`
+
+`
 export const ButtonGreen = styled(Button)`
   && { // temos colocar && para alterar cor e outras coidsa do styled components
     background-color: #16cf16;
@@ -71,6 +108,7 @@ export const DynamicWrapper = styled.div`
 
 export const QuirkySection = styled.div`
   background-color: #c0c0c0;
+  border-radius: 10px 10px 10px 10px;
   padding: 9px;
   margin: 0px 25px 16px 25px;
 `;
@@ -78,6 +116,7 @@ export const QuirkySection = styled.div`
 export const ColorfulPanel = styled.div`
   background-color: #b0b0b0;
   padding: 11px 11px 11px 11px;
+  border-radius: 10px 10px 10px 10px;
   margin: 7px;
   cursor: pointer;
 `;
@@ -106,7 +145,7 @@ export const ContainerImages = styled.div`
     flex-wrap: wrap;
     overflow-y: scroll;
     width: 100%;
-    height: 241px;
+    height: 472px;
     background-color: #e5e5e5;
 `
 export const ContainerScroll = styled.div`
@@ -131,12 +170,16 @@ export const ListContainer = styled.div`
   cursor: pointer;
 `
 export const PictureContainer = styled.div`
-  width: 100px;
-  height: 100px;
-  background: url(${props => props.$AtrPicture ? props.$AtrPicture : 'green'});
+  width: 200px;
+  height: 200px;
+  /* background: url(${props => props.$AtrPicture ? props.$AtrPicture : ''}) no-repeat center center; */
   background-size: cover;
   margin: 10px;
   cursor: pointer;
+`
+export const Img = styled.img`
+  width: 100%;
+  height: 100%;
 `
 export const ContainerSerach = styled.div`
 width: 100%;
@@ -157,6 +200,7 @@ export const Container = styled.div`
  justify-content: end;
  align-items: center;
  height: 100px;
+ border-radius: 10px 10px 0px 0px;
  width: 95%;
  margin: 40px 40px 0 40px;
  background-color: #5b5b5b;
@@ -237,15 +281,15 @@ export const ContenedorExpand = styled.span`
   }
 `
 export const ContainerButton =  styled.div`
+  display: none;
   position: absolute;
   justify-content: center;
   gap: 1vw;
-  width: 38%;
-  display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
   justify-content: center;
-  top: 81%;
+  top: 100%;
 
   @media screen and (max-width: 840px) { 
     margin: 7px 0;
@@ -272,6 +316,9 @@ export const ButtonSend =  styled.button`
   }
   &:hover{
     background-color: #00000054;
+  }
+  &:active{
+    opacity: 0.6;
   }
 `
 
@@ -374,7 +421,7 @@ export const Menu = styled.div`
   }
 `
 export const BoxDiv = styled.div`
-  display: flex;
+  display: none;
   background-color: #fff;
   flex-direction: column;
   align-items: center;
@@ -394,7 +441,7 @@ export const BoxText = styled.div`
   border-radius: 10px 10px 0px 0px;
   text-align: center;
 `
-export const Box = styled.textarea` //uma caixa de texto
+export const BoxCaixa = styled.textarea` //uma caixa de texto
   outline: none;
   height: 100%;
   width: 100%;
@@ -419,6 +466,7 @@ export const LastCommit = styled.div`
   border: 1px solid black;
 ` 
 export const PopCommit = styled.span`
+  display: none;
   background-color: #fff;
   cursor: pointer;
   width: 96px;

@@ -33,18 +33,24 @@ import { FunkyContainer,
   ButtonGreen,
   ButtonRed,
   Fita,
-  Box,
   BottonCommit,
   CloseCommit,
   StyledResizableTextarea,
+  BoxCaixa,
+  Img,
+  LoadCircularProgress,
+  BoxLoad,
   ButtonS,
-  Menu
+  FundoLoad,
+  Menu,
+  FundoLoadImg
 } from './style';
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';  // npm install dayjs
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { v4 } from 'uuid'; 
 
 import { useEffect, useState } from 'react';
 import apiServicen8n from '../services/apin8n8.js';
@@ -67,7 +73,7 @@ const App = () => {
   const [activebotton,setactivebotton] = useState(true)
   const [pasta,setpasta] = useState([])
   const [textcommit,settextcommit] = useState('')
-
+  const [ablepag,setablepag] = useState(false)
 
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
@@ -142,6 +148,10 @@ const App = () => {
   console.log("pathn8n[2]   ",  pathn8n[2]);
   console.log("pathn8n[3]   ",  pathn8n[3]);
   async function loadServicos(prop,index) {
+    let ContainerButton = document.getElementById('ContainerButton')
+    let PopCommit = document.getElementById('PopCommit')
+    PopCommit.style.display = 'none'
+    ContainerButton.style.display = 'none'
     console.log("Contagem canal :    ", prop);
     console.log("Contagem index :    ", index);
     setPathn8n([prop]);  // slice(1)  Pega todos os intens que vem depoois da posiçao 1.
@@ -162,6 +172,10 @@ const App = () => {
     }
   }
   async function loadServicoswk(prop,ipes) {
+    let ContainerButton = document.getElementById('ContainerButton')
+    let PopCommit = document.getElementById('PopCommit')
+    PopCommit.style.display = 'none'
+    ContainerButton.style.display = 'none'
     let newarray = pathn8n.splice(1)
     setPathn8n(newarray)
     actbotton()
@@ -191,6 +205,12 @@ const App = () => {
 
   }
     async function loadServicosfoto(ipes,dop) {
+      let ContainerButton = document.getElementById('ContainerButton')
+      let PopCommit = document.getElementById('PopCommit')
+      let BoxText = document.getElementById('BoxText')
+      PopCommit.style.display = 'flex'
+      ContainerButton.style.display = 'flex'
+
       let newarray = pathn8n.splice(2)
       setPathn8n(newarray)
       setPathn8n([...pathn8n,dop])
@@ -200,6 +220,11 @@ const App = () => {
       
       const text = pasta.filter((text) => text.nome == dop)
       settextcommit(text[0].commit)
+      if(text[0].commit != null){
+        BoxText.style.display = 'block'
+      }else{ 
+        BoxText.style.display = 'none'
+      }
 
       if(window.innerWidth < 840){
         const ExpandContainerscrooll = document.getElementById("ExpandContainerscrooll");
@@ -257,11 +282,11 @@ const App = () => {
       const bigimg = document.getElementById('expanding')
       if(bigimg.style.display == 'block'){ 
 
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
         console.log("ArrowLeft or ArrowDown");
         KeyBoardPicturedown(indexpicture)
       }
-      if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
         console.log("ArrowRight or ArrowUp");
         KeyBoardPictureup(indexpicture);
     
@@ -298,6 +323,8 @@ const App = () => {
     function Sharedata(){
       Send()
       SendCommit()
+      const BoxDiv = document.getElementById('BoxDiv')
+      BoxDiv.style.display = 'none'
     }
 
     
@@ -325,8 +352,6 @@ const App = () => {
     }
 
     function actbotton(){
-      const VibrantBox = document.getElementById('VibrantBox')
-      const Fita = document.getElementById('Fita')
       if(activebotton == true){
         setactivebotton(false)
       }else{ 
@@ -350,10 +375,18 @@ const App = () => {
     }
 
     // console.log('textcommit.nome:      ',textcommit[0].commit);
-    console.log("pathn8n       ",pathn8n);
+    
+   if(servicoscanais[0] != null && ablepag != true ){
+    setablepag(true)
+   }
+
   return(
     <>
     <FunkyContainer>
+      <FundoLoad id='FundoLoad' $act={ablepag? 'true' : null}></FundoLoad>
+      <BoxLoad id='BoxLoad' sx={{ display: 'flex' }} $act={ablepag? 'true' : null}>
+        <LoadCircularProgress />
+      </BoxLoad>
         <Expanding id='expanding' $ActivPicture={expandimage}>
           <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
           close
@@ -368,20 +401,20 @@ const App = () => {
                   Commit
                 </BoxText>
               </div>
-              <Box ref={areatextref}>
-              </Box>
-              <ButtonSend onClick={() => Sharedata('Send')}>Send</ButtonSend>
+              <BoxCaixa ref={areatextref}>
+              </BoxCaixa>
+              <ButtonSend  id={v4()} onClick={() => Sharedata('Send')}>Send</ButtonSend>
             </BoxDiv>
-          <VibrantBox id='VibrantBox' act={activebotton}>
+          <VibrantBox id='VibrantBox' act={activebotton? 'Possui dados': null}>
             {service && service.map( (ser,index) => (
             <>
-              <Servicos onClick={() =>loadServicos(ser.nome,index)}>
+              <Servicos  id={v4()} onClick={() =>loadServicos(ser.nome,index)}>
                 {ser.nome}
               </Servicos>
               <QuirkySection id={ser.nome} style={{display: 'none'}}>
                 {work && work.map(wk => (
                 <>
-                <ColorfulPanel onClick={() => loadServicoswk(ser.nome,wk.nome)}>
+                <ColorfulPanel id={v4()} onClick={() => loadServicoswk(ser.nome,wk.nome)}>
                   {wk.nome}
                 </ColorfulPanel>
                 {/* ---------------------------------------------- */}
@@ -391,7 +424,7 @@ const App = () => {
             </>
                   ))} 
           </VibrantBox>
-          <Fita id='Fita' onClick={() => actbotton()} act={activebotton}></Fita>
+          <Fita id='Fita' onClick={() => actbotton()} act={activebotton? 'Possui dados': null}></Fita>
       <ContainerSerach>
         <Container>
           <Serch>
@@ -414,7 +447,7 @@ const App = () => {
                 <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
                   {files && files.map(file => (
                     <>
-                    <ListContainer onClick={() => loadServicosfoto(wk.nome,file.nome)}>
+                    <ListContainer id={v4()} onClick={() => loadServicosfoto(wk.nome,file.nome)}>
                       {file.nome}
                     </ListContainer>
                     </>
@@ -425,17 +458,21 @@ const App = () => {
           </ContenedorData>
           <MainImage>
             <ContainerImages>
-              {picture && picture.map(picture => ( 
-                <PictureContainer $AtrPicture = {picture.foto} onClick={() => FildIndexPicture(picture.foto)}>
+              <FundoLoadImg></FundoLoadImg>
+              {  
+              picture && picture.map(picture =>{ 
+                return ( 
+                <PictureContainer onClick={() => FildIndexPicture(picture.foto)}>
+                  <Img id={v4()} src={picture.foto} />
                 </PictureContainer>
-              ))}
+              )})}
             </ContainerImages>
             <BoxDiv id='BoxLastCommit'>
               <div>
                 <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxLastCommit')} >
                   close
                 </CloseCommit>
-                <BoxText>
+                <BoxText id='BoxText'>
                   Last Commit
                 </BoxText>
               </div>
@@ -444,8 +481,8 @@ const App = () => {
               </LastCommit>
             </BoxDiv>
             <BottonCommit>
-              <PopCommit onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
-              <ContainerButton>
+              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
+              <ContainerButton id='ContainerButton'>
                 <ButtonGreen  onClick={() => TextBox("Aprovado") } variant="contained"  disableElevation>
                   Approved
                 </ButtonGreen>
@@ -457,10 +494,6 @@ const App = () => {
                 <ButtonRed onClick={() => {TextBox("Reprovado"); return OpenCommitfunctin('BoxDiv')}} variant="contained" disableElevation>
                   Disapproved
                 </ButtonRed>
-              
-                {/* <ButtonGreen onClick={() => Sharedata("Aprovado")}>Approved</ButtonGreen>
-                <Button onClick={() => Sharedata("Pendente")}>Pending</Button>
-                <ButtonRed onClick={() => Sharedata("Reprovado")}>Disapproved</ButtonRed> */}
               </ContainerButton>
             </BottonCommit>
           </MainImage> 

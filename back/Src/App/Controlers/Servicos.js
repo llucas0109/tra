@@ -171,20 +171,35 @@ class servicos {
   
     console.log("Dados recebidos Conect", Conect);
     console.log("Dados recebidos Commit", Commit);
-
+  
     let dados = Conect[0] + '_' + Conect[1];
   
     console.log("dados de conexão:  ", dados);
   
     try {
-      const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
+      const conexao = await Conecao(); // Aguarde a conexão ser estabelecida
   
-      const query = `update ${dados} set commit = '${Commit}' where nome = '${Conect[2]}'`;
+      const query = `UPDATE ${dados} SET commit = ? WHERE nome = ?`;
+      await conexao.promise().query(query, [Commit, Conect[2]]);
+      
+      // Supondo que você está usando um ORM ou uma biblioteca de acesso a banco de dados
+  
+      // Se estiver usando raw SQL com algum módulo de banco de dados, você deve executar a query
+      // await conexao.execute(query, [Commit, Conect[2]]);
+  
+      // ...
+  
+      // Feche a conexão após a conclusão da operação
+      await conexao.close();
+  
+      // Envie uma resposta de sucesso
+      return response.status(200).json({ message: 'Dados atualizados com sucesso' });
     } catch (error) {
       console.error('Erro inesperado:', error);
       return response.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
+  
 
 }
 export default new servicos();
