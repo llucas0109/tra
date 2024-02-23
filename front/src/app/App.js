@@ -43,6 +43,10 @@ import { FunkyContainer,
   ButtonS,
   FundoLoad,
   Menu,
+  Grid,
+  BackgroundBigImg,
+  BoxTextLast,
+  BlockButton,
   FundoLoadImg
 } from './style';
 
@@ -78,6 +82,7 @@ const App = () => {
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
   const [patch,setpatch] = useState([])
+  const [fotos,setfotos] = useState([])
 //--------------------------------------------------------------------------
   
   const inputRef = useRef(null);
@@ -99,14 +104,18 @@ const App = () => {
       const resultadoPromises = await Promise.all(promises);
 
       // Atualizando o estado com todos os resultados
-      setservicoscanais([...servicoscanais, ...resultadoPromises]);   
+      setservicoscanais([...servicoscanais, ...resultadoPromises]);  
+      //-----------------------------------------------------------
+
+      const { data } = await apiService.post('/servicos/fotos');
+      console.log("all fotoss             ",data);
+      setfotos(data)
     }
 
     loadStartServicos(); // Chamando a função para que ela possa ser executada
   }, []);
 
   
-
   const Buscador = () => {
     const text = inputRef.current.value
     const seach = files.filter(file => file.nome == text)
@@ -124,7 +133,6 @@ const App = () => {
       const DataFilter = contdata && contdata.filter(file => {
         return file.dataConclusao.split('T')[0] == dataInput;
       });
-
       setfiles(DataFilter)
       //-------------------------------------
       const ErrorFiles = document.getElementById('ErrorFiles');
@@ -198,12 +206,12 @@ const App = () => {
 
     if(window.innerWidth < 840){
       const ContainerScroll = document.getElementById('ContainerScroll')
-      const VibrantBox = document.getElementById('VibrantBox')
-      const Fita = document.getElementById('Fita')
+      ContainerScroll.style.display = 'block'
       // Fita.style.animation = `${AniPostitionMoveFita} 2s ease`
     }
 
   }
+  console.log("pasta dados que preciso.       ",pasta);
     async function loadServicosfoto(ipes,dop) {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
@@ -214,9 +222,11 @@ const App = () => {
       let newarray = pathn8n.splice(2)
       setPathn8n(newarray)
       setPathn8n([...pathn8n,dop])
-      console.log("dop recebido",dop);
-      const { data } = await apiService.post('/servicos/fotos',{Mapa:ipes,Foto:dop});
-      setpicture(data)
+
+      const data = fotos.filter((fotos) => fotos.servico_id == dop)
+      const filterhttp = data.filter((http) => http.servico_id == dop) 
+      console.log("Dados recebidos de imagem direto funcao       ",filterhttp);
+      setpicture(filterhttp)
       
       const text = pasta.filter((text) => text.nome == dop)
       settextcommit(text[0].commit)
@@ -227,7 +237,6 @@ const App = () => {
       }
 
       if(window.innerWidth < 840){
-        const ExpandContainerscrooll = document.getElementById("ExpandContainerscrooll");
         const ContainerScroll = document.getElementById('ContainerScroll')
         ContainerScroll.style.display = 'none'
       }
@@ -303,6 +312,7 @@ const App = () => {
       keyboard.bind('down', up);
       keyboard.bind('left', up);
       keyboard.bind('right', up);
+      keyboard.bind('esc', Close);
     
     if (expandimage != 0) {
       console.log("Continua entrando ");
@@ -348,7 +358,7 @@ const App = () => {
       const text = areatextref.current.value
       console.log("text   ",text); 
       console.log("pathn8n   " ,pathn8n);
-      await apiService.post('/servicos/commit',{Conect: pathn8n , Commit:text})
+      await apiService.put('/servicos/commit',{Conect: pathn8n , Commit:text})
     }
 
     function actbotton(){
@@ -363,17 +373,29 @@ const App = () => {
       const BoxDiv = document.getElementById(`${id}`)
       BoxDiv.style.display = 'none'
     }
-    function OpenCommitfunctin(id){
-      const BoxDiv = document.getElementById(`${id}`)
-      BoxDiv.style.display = 'flex'
+    function OpenCommitfunctin(id,textmenubox){
+      if(textmenubox != undefined){ 
+        const BoxDiv = document.getElementById(`${id}`)
+        const textmenuboxf = document.getElementById(`${textmenubox}`)
+        textmenuboxf.style.display = 'block'
+        BoxDiv.style.display = 'flex'
+      }else{
+        const textmenuboxf = document.getElementById(`${id}`)
+        textmenuboxf.style.display = 'block'
+      }
     }
-    function TextBox(childrem){
+    async function TextBox(childrem){
       console.log("TextBox     ", childrem);
       let newarray = pathn8n.splice(3)
       setPathn8n(newarray)
       setPathn8n([...pathn8n,childrem])
     }
-
+    async function Updatestatus(){ 
+      await apiService.put('/servicos/status',{Data:pathn8n});
+    }
+    async function UpdatestatusAprovado(){ 
+      await apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'});
+    }
     // console.log('textcommit.nome:      ',textcommit[0].commit);
     
    if(servicoscanais[0] != null && ablepag != true ){
@@ -382,11 +404,13 @@ const App = () => {
 
   return(
     <>
+    {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
     <FunkyContainer>
       <FundoLoad id='FundoLoad' $act={ablepag? 'true' : null}></FundoLoad>
       <BoxLoad id='BoxLoad' sx={{ display: 'flex' }} $act={ablepag? 'true' : null}>
         <LoadCircularProgress />
       </BoxLoad>
+        <BackgroundBigImg />
         <Expanding id='expanding' $ActivPicture={expandimage}>
           <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
           close
@@ -403,7 +427,10 @@ const App = () => {
               </div>
               <BoxCaixa ref={areatextref}>
               </BoxCaixa>
-              <ButtonSend  id={v4()} onClick={() => Sharedata('Send')}>Send</ButtonSend>
+              <Grid>
+              <BlockButton $act ={ inputRef?'yes':"no" }></BlockButton>
+              <ButtonSend  id={v4()} onClick={() => {Sharedata('Send'); return Updatestatus()}}>Send</ButtonSend>
+              </Grid>
             </BoxDiv>
           <VibrantBox id='VibrantBox' act={activebotton? 'Possui dados': null}>
             {service && service.map( (ser,index) => (
@@ -428,7 +455,7 @@ const App = () => {
       <ContainerSerach>
         <Container>
           <Serch>
-            <InputSerach placeholder='Digite algo para pequisar' ref={inputRef} onKeyDown={keyDownHandler}></InputSerach>
+            <InputSerach placeholder='Search' ref={inputRef} onKeyDown={keyDownHandler}></InputSerach>
             <BottonSerch onClick={Buscador}><span className="material-symbols-outlined" >search</span></BottonSerch>
           </Serch>
         </Container>
@@ -447,7 +474,9 @@ const App = () => {
                 <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
                   {files && files.map(file => (
                     <>
-                    <ListContainer id={v4()} onClick={() => loadServicosfoto(wk.nome,file.nome)}>
+                    <ListContainer id={v4()} onClick={() => loadServicosfoto(wk.nome,file.nome)}
+                    $bordercolor={file.status}
+                    >
                       {file.nome}
                     </ListContainer>
                     </>
@@ -461,6 +490,7 @@ const App = () => {
               <FundoLoadImg></FundoLoadImg>
               {  
               picture && picture.map(picture =>{ 
+                console.log('picture.foto    ',picture.foto);
                 return ( 
                 <PictureContainer onClick={() => FildIndexPicture(picture.foto)}>
                   <Img id={v4()} src={picture.foto} />
@@ -472,9 +502,9 @@ const App = () => {
                 <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxLastCommit')} >
                   close
                 </CloseCommit>
-                <BoxText id='BoxText'>
+                <BoxTextLast id='BoxTextLast'>
                   Last Commit
-                </BoxText>
+                </BoxTextLast>
               </div>
               <LastCommit>
                 {textcommit}
@@ -483,15 +513,15 @@ const App = () => {
             <BottonCommit>
               <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
               <ContainerButton id='ContainerButton'>
-                <ButtonGreen  onClick={() => TextBox("Aprovado") } variant="contained"  disableElevation>
+                <ButtonGreen  onClick={() => {TextBox("Aprovado"); return UpdatestatusAprovado()}} variant="contained"  disableElevation>
                   Approved
                 </ButtonGreen>
               
-                <ButtonPendente onClick={() => {TextBox("Pendente"); return OpenCommitfunctin('BoxDiv')}} variant="contained" disableElevation>
+                <ButtonPendente onClick={() => {TextBox("Pendente"); return OpenCommitfunctin('BoxDiv','BoxText')}} variant="contained" disableElevation>
                   Pending
                 </ButtonPendente>
               
-                <ButtonRed onClick={() => {TextBox("Reprovado"); return OpenCommitfunctin('BoxDiv')}} variant="contained" disableElevation>
+                <ButtonRed onClick={() => {TextBox("Reprovado");  return OpenCommitfunctin('BoxDiv','BoxText')}} variant="contained" disableElevation>
                   Disapproved
                 </ButtonRed>
               </ContainerButton>

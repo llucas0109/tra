@@ -111,17 +111,12 @@ class servicos {
   }
   
   async picture(request, response) {
-    const { Mapa, Foto } = request.body;
-  
-    console.log("Dados recebidos Mapa", Mapa);
-    console.log("Dados recebidos Foto", Foto);
-    console.log("Foto a procurar", Mapa + Foto);
   
     try {
       const coneccao = await Conecao(); // Aguarde a conexão ser estabelecida
   
-      const query = `SELECT * FROM fotos WHERE mapa = ? AND servico_id = ?`;
-      const [resultados] = await coneccao.promise().query(query, [Mapa, Foto]);
+      const query = `SELECT * FROM servicos.fotos;`;
+      const [resultados] = await coneccao.promise().query(query);
   
       let ArrayResult = [];
   
@@ -135,6 +130,7 @@ class servicos {
       });
   
       console.log("ArrayResult", ArrayResult);
+
       coneccao.end();
       return response.send(ArrayResult);
     } catch (error) {
@@ -142,6 +138,7 @@ class servicos {
       return response.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
+  
   
   async sql(request, response) {
     const {Data} = request.body
@@ -181,15 +178,6 @@ class servicos {
   
       const query = `UPDATE ${dados} SET commit = ? WHERE nome = ?`;
       await conexao.promise().query(query, [Commit, Conect[2]]);
-      
-      // Supondo que você está usando um ORM ou uma biblioteca de acesso a banco de dados
-  
-      // Se estiver usando raw SQL com algum módulo de banco de dados, você deve executar a query
-      // await conexao.execute(query, [Commit, Conect[2]]);
-  
-      // ...
-  
-      // Feche a conexão após a conclusão da operação
       await conexao.close();
   
       // Envie uma resposta de sucesso
@@ -199,7 +187,49 @@ class servicos {
       return response.status(500).json({ error: 'Erro interno do servidor' });
     }
   }
-  
+  async status(request, response) {
+    const { Data,Status } = request.body;
+    
+    let dados = '';
+    dados = Data[0] + '_' + Data[1];
 
+    if(Status != undefined){ 
+      Data[3] = Status
+      console.log('Data[3]',Data[3]);
+    }
+    console.log("dados de conexão Para status:  ", dados);
+  
+    try {
+      const conexao = await Conecao(); // Aguarde a conexão ser estabelecida
+  
+      const query = `UPDATE ${dados} SET status = ? WHERE nome = ?`;
+  
+      await conexao.promise().query(query, [Data[3], Data[2]], (error, resultados) => {
+        if (error) {
+          conexao.end();
+          throw error;
+        }
+  
+        let ArrayResult = [];
+  
+        resultados.forEach((resultado) => {
+          console.log(resultado.nome);
+          console.log(resultado.dataCriacao);
+  
+          if (typeof resultado !== 'undefined') {
+            ArrayResult.push(resultado);
+          }
+        });
+  
+        console.log("ArrayResult", ArrayResult);
+        conexao.end();
+        return response.send(ArrayResult);
+      });
+    } catch (error) {
+      console.error('Erro inesperado:', error);
+      return response.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  }
+   
 }
 export default new servicos();

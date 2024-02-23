@@ -13,6 +13,7 @@ rota.post('/servicos', servicos.index)
 rota.post('/servicos/fotos', servicos.picture)
 rota.post('/servicos/data', servicos.data)
 rota.post('/servicos/sql', servicos.sql)
-rota.post('/servicos/commit', servicos.commit)
+rota.put('/servicos/commit', servicos.commit)
+rota.put('/servicos/status', servicos.status)
 
 export default rota

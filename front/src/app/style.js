@@ -151,6 +151,7 @@ export const ContainerImages = styled.div`
 export const ContainerScroll = styled.div`
   width: 240px;
   height: 100%;
+  overflow-y:  hidden;
   @media screen and (max-width: 840px) {
     height: 65%;
     width: 100%;
@@ -168,6 +169,10 @@ export const ListContainer = styled.div`
   padding:  10px 10px 10px 18px;
   margin: 10px;
   cursor: pointer;
+  border: 3px solid ${ (prop) => prop.$bordercolor == 'Aprovado'? '#16CF16' :
+   prop.$bordercolor == 'Reprovado'? '#D10000'  :
+   prop.$bordercolor == 'Pendente'? '#ABAB05' : '#808080' };
+   border-radius: 10px;
 `
 export const PictureContainer = styled.div`
   width: 200px;
@@ -250,7 +255,7 @@ export const Expanding = styled.div`
   position: absolute;
   width: 90%;
   height: 90%;
-  z-index: 3;
+  z-index: 6;
   background: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
   background-size: contain;
   background-repeat: no-repeat;
@@ -259,11 +264,6 @@ export const Expanding = styled.div`
   margin: 10px;
   box-shadow: 0px 0px 0 100px #000000a8;
 
-  &::after{
-    content: '';
-    display: block;
-    background-color: black;
-  }
 `
 export const ContenedorExpand = styled.span`
   position: absolute;
@@ -304,13 +304,14 @@ export const ButtonContenedor =  styled.div`
   
 `
 export const ButtonSend =  styled.button`
-  width: 91%;
+  width: 100%;
   border-radius: 10px 10px 10px 10px;
   top: 81%;
   height: 70px;
   border: none;
-  margin: 5px 0px 5px 0px;
-  
+  z-index: 4;
+  grid-row: 1/2;
+  grid-column: 1/2;
   &::selection{
     background-color: black;
   }
@@ -441,6 +442,14 @@ export const BoxText = styled.div`
   border-radius: 10px 10px 0px 0px;
   text-align: center;
 `
+export const BoxTextLast = styled.div`
+  width: 100%;
+  font-size: 19px;
+  font-weight: 700;
+  padding-bottom: 5px;
+  border-radius: 10px 10px 0px 0px;
+  text-align: center;
+`
 export const BoxCaixa = styled.textarea` //uma caixa de texto
   outline: none;
   height: 100%;
@@ -505,4 +514,32 @@ export const BottonCommit = styled.div`
     width: 90%;
     font-size: 10px;
   }
+`
+export const BackgroundBigImg = styled.div`
+  display: ${props => props.$ActivPicture ? 'block' : 'none'};
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background: url(${props => props.$ActivPicture ? 'black' : 'none'});
+`
+export const BlockButton = styled.div`
+  background-color: #ffffff96;
+  display: ${prop => prop.$act?"block":"none"};
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  grid-row: 1/2;
+  grid-column: 1/2;
+`
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: 91%;
+  border-radius: 10px 10px 10px 10px;
+  top: 81%;
+  height: 70px;
+  border: none;
+  margin: 5px 0px 5px 0px;
+
 `

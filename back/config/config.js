@@ -2,7 +2,7 @@
 // docker run --name percona -e MYSQL_ROOT_PASSWORD=xghTCrCcXPTuLL9iaACE -p 3306:3306 -d percona
 // Nesse caso para fazer a migraçao de dados e acesso ao servidor usamos os dados de conecçao que roda o "servidor". que tem o docker.
 // docker exec -it percona mysql -u root -p    Para Poder acessar o container mysql para cria um banco de dados.
-
+// docker update --restart always f19e3561cb87   sempre que cair ele restarta
 import mysql from 'mysql2';
 
 async function Conecao() {
