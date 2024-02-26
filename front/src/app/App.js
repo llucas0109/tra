@@ -46,6 +46,8 @@ import { FunkyContainer,
   Grid,
   BackgroundBigImg,
   BoxTextLast,
+  Rotation,
+  BAckTorow,
   Divloadf,
   BlockButton,
   FundoLoadImg
@@ -56,14 +58,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { toast } from 'react-toastify';
-import { v4 } from 'uuid'; 
+//-------------------------------------------
+//-------------------------------------------
 
+import { v4 } from 'uuid'; 
 import { useEffect, useState } from 'react';
 import apiServicen8n from '../services/apin8n8.js';
 import apiService from '../services/api.js';
 
 import { useRef } from 'react'; 
 import { element } from 'prop-types';
+import pix from './pexels-cz-jen-16188539.jpg'
 const keyboard = require('keyboardjs');
 
 
@@ -82,7 +87,8 @@ const App = () => {
   const [textcommit,settextcommit] = useState('')
   const [ablepag,setablepag] = useState(false)
   const [digit,sedigit] = useState(false)
-  const [pulse,setpulse] = useState(false)
+  const [pulse,setpulse] = useState(true)
+  const [servcesfillter,setservcesfillter] = useState('')
 
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
@@ -112,6 +118,7 @@ const App = () => {
       //-----------------------------------------------------------
 
       const { data } = await apiService.post('/servicos/fotos');
+      
       setfotos(data)
     }
 
@@ -168,6 +175,7 @@ const App = () => {
       }
     }
   }
+  const [usd,setusd] = useState([])
   async function loadServicoswk(prop,ipes) {
     let ContainerButton = document.getElementById('ContainerButton')
     let PopCommit = document.getElementById('PopCommit')
@@ -187,19 +195,38 @@ const App = () => {
       const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
       setpasta(data)
       const SomenteData = data.filter(data => data.dataConclusao != null)
-      setcontdata(SomenteData)
-      setfiles(SomenteData)
-      
-    }
+      console.log('SomenteData  ',SomenteData);
 
+      // const NewSomenteData = SomenteData && SomenteData.forEach( (ser) => {
+      //   const valoretorne = fotos.filter(wk => {
+      //     return ser.nome == wk.servico_id
+      //   })
+        
+      //  return 
+      // });
+      console.log("fotos   ",fotos)
+      let SomenteData2 = []
+      for(let i = 0; i < SomenteData.length;i++){
+        console.log('prop ',prop);
+        for(let j = 0; j < fotos.length;j++){
+          if(fotos[j].servico_id == SomenteData[i].nome){
+            SomenteData2.push(SomenteData[i]);
+            break
+          }
+        }
+      }  
+      console.log("SomenteData2    ",SomenteData2);
+
+      setcontdata(SomenteData2)
+      setfiles(SomenteData2)
+    }
     if(window.innerWidth < 840){
       const ContainerScroll = document.getElementById('ContainerScroll')
       ContainerScroll.style.display = 'block'
       // Fita.style.animation = `${AniPostitionMoveFita} 2s ease`
     }
-
   }
-
+  console.log('usd   ',usd);
     async function loadServicosfoto(ipes,dop) {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
@@ -222,11 +249,13 @@ const App = () => {
       }else{ 
         BoxText.style.display = 'none'
       }
+      
       setpulse(true)
       if(window.innerWidth < 840){
         const ContainerScroll = document.getElementById('ContainerScroll')
         ContainerScroll.style.display = 'none'
       }
+
     }
     function FildIndexPicture(img){
       setexpandimage(img)
@@ -381,10 +410,8 @@ const App = () => {
       sedigit(false)
     }  
   }
-  function DisBleLoad(id2){
-    const back = document.getElementById(`${id2}`)
-      back.style.display = "none" 
-      setpulse(false)
+  function DisBleLoad(){
+    setpulse(false)
   }
 
   function loadpicture(id,id2){
@@ -400,20 +427,31 @@ const App = () => {
 
   }
   // toast.success('Cadastro criado com sucesso')
+  console.log("load ", pulse);
+
+  const onInit = () => {
+    console.log('lightGallery has been initialized');
+  };
   return(
     <>
     {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
     <FunkyContainer>
       <FundoLoad id='FundoLoad' $act={ablepag? 'true' : null}></FundoLoad>
+      {/* <BackgroundBigImg id='BackgroundBigImg'  $ActivPicture={expandimage} /> */}
       <BoxLoad id='BoxLoad' sx={{ display: 'flex' }} $act={ablepag? 'true' : null}>
         <LoadCircularProgress />
       </BoxLoad>
-        <BackgroundBigImg />
-        <Expanding id='expanding' $ActivPicture={expandimage}>
-          <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
-          close
-          </ContenedorExpand>
+        <Expanding id='expanding' $ActivPicture={expandimage} src={expandimage} >
+
         </Expanding>
+        {/* <Icons> */}
+        <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
+          close
+        </ContenedorExpand>
+        <Rotation class="material-symbols-outlined">
+          screen_rotation
+        </Rotation>
+        {/* </Icons> */}
             <BoxDiv id='BoxDiv'>
               <div>
                 <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxDiv')} >
@@ -458,15 +496,15 @@ const App = () => {
           </Serch>
         </Container>
         <DynamicWrapper>
-          <ContenedorData>
-            <InitContainerScroll>
+        <InitContainerScroll>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}  >
                 <DatePicker label="Data" onChange={dataFilter} />
               </DemoContainer>
             </LocalizationProvider>
             </InitContainerScroll>
-            <ContainerScroll id='ContainerScroll'>
+          <ContenedorData id='ContainerScroll'>
+            <ContainerScroll>
               {work && work.map(wk => (
               <ItemList id={wk.nome} style={{display: 'none'}}>
                 <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
@@ -483,6 +521,7 @@ const App = () => {
               ))}
             </ContainerScroll>
           </ContenedorData>
+          <BAckTorow />
           <MainImage>
             <ContainerImages id='Blur'>
               <FundoLoadImg></FundoLoadImg>
@@ -492,12 +531,12 @@ const App = () => {
                 const iid2 = v4() 
                 return ( 
                 <PictureContainer    onClick={() => FildIndexPicture(picture.foto)}>
-                  <Divloadf id={iid2} className='DivFloat' $act={pulse?'true':null} ></Divloadf>
+                  <Divloadf id={iid2} $act={pulse?'true':'false'} ></Divloadf>
                   <Img id={ iid } key={v4()} onLoad={() => loadpicture(iid,iid2)} src={picture.foto} 
                   loading="lazy"
                   width="500" 
                   height="300" 
-                    />
+                  />
                     
                 </PictureContainer>
               )})}

@@ -21,12 +21,14 @@ export const pulse = keyframes`
 `
 export const Divloadf = styled.div`
   width: 150px;
-  height: 150px;
+  height: 150px; 
+  grid-row: 1/2;
+  grid-column: 1/2; 
   display: block;
+  display: ${(prop) => prop.$act == 'true'? 'block': 'none'};
   margin: 30px;
   background-color: #ccc;
-  position: absolute;
-  
+  z-index: 1;
   animation: ${pulse} 1.5s infinite;
 `
 export const BoxLoad = styled(Box)`
@@ -207,6 +209,9 @@ export const ListContainer = styled.div`
 export const PictureContainer = styled.div`
   width: 200px;
   height: 150px;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
   /* background: url(${props => props.$AtrPicture ? props.$AtrPicture : ''}) no-repeat center center; */
   background-size: cover;
   margin: 10px;
@@ -215,6 +220,9 @@ export const PictureContainer = styled.div`
 export const Img = styled.img`
   width: 100%;
   height: auto;
+  grid-row: 1/2;
+  grid-column: 1/2;
+  z-index: 2;
 `
 export const ContainerSerach = styled.div`
 width: 100%;
@@ -280,34 +288,53 @@ export const BottonSerch = styled.a`
   cursor: pointer;
 
 `
-export const Expanding = styled.div`
+export const Expanding = styled.img`
   display: none;
   position: absolute;
   width: 90%;
-  height: 90%;
   z-index: 6;
-  background: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
+  transform: rotate(90deg);
+  padding: -70px -70px;
+  background-image: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
   border: 1px solid black;
   margin: 10px;
-  box-shadow: 0px 0px 0 100px #000000a8;
+  box-shadow: 0px 0px 0 500px #000000a8;
 
 `
+export const Rotation = styled.span`
+display: none;
+  position: absolute;
+  font-size: 57px;
+  background-color: #00000096;
+  z-index: 7;
+  top: 2%;
+  left: 50%;
+  cursor: pointer;
+  border-radius: 10px;
+  color: #ffffff82;
+  cursor: pointer;
+  &:hover{
+    opacity: 0.8;
+  }
+`
+
 export const ContenedorExpand = styled.span`
   position: absolute;
   display: none;
-  font-size: 70px;
-  background-color: #00000078;
-  z-index: 2;
-  top: 5%;
-  left: 5%;
+  font-size: 57px;
+  background-color: #00000096;
+  z-index: 7;
+  top: 2%;
+  left: 75%;
   cursor: pointer;
-  top: 140px;
-  left: 30px;
+  border-radius: 10px;
+  color: #ffffff82;
+  cursor: pointer;
   &:hover{
-    
+    opacity: 0.8;
   }
 `
 export const ContainerButton =  styled.div`
@@ -359,10 +386,13 @@ export const Error =  styled.p`
   font-size: 13px;
   
 `
+export const BAckTorow = styled.div`
+
+`
 export const ContenedorData = styled.div`
    
    @media screen and (max-width: 840px) {
-      height: 350px;
+      height: 95%;
    }
 `
 export const InitContainerScroll = styled.div`
@@ -381,8 +411,7 @@ export const ExpandContainerscrooll = styled.div`
 //------------Animacoes-------------------------------
  export const AnimationMenudown = keyframes` 
   1%{left: 2%} 
-  99%{left: -61%}
-  100%{display: none}
+  100%{left: -61%}
  `
  export const AnimationMenuup = keyframes` 
   1%{left: -61%} 
@@ -421,7 +450,7 @@ export const VibrantBox = styled.div`
   min-width: 300px;
   height: 100%;
   display: block;
-  z-index: 2;
+  z-index: 4;
 
   @media screen and (max-width: 840px){
     display: block;
@@ -460,7 +489,7 @@ export const BoxDiv = styled.div`
   position: absolute;
   border: 1px solid #1565C0;
   z-index: 2;
-  height: 60%;
+  height: 42%;
   width: 300px;
   border-radius: 10px 10px 10PX 10PX;
 `
@@ -504,11 +533,11 @@ export const LastCommit = styled.div`
   width: 90%;
   border: 1px solid black;
 ` 
-export const PopCommit = styled.span`
-  display: none;
+export const PopCommit = styled(Button)`
+  &&{display: none;
   background-color: #fff;
   cursor: pointer;
-  width: 96px;
+  width: 110px;
   height: 31px;
   border-radius: 15px 15px 15px 15px;
   align-self: flex-end;
@@ -518,11 +547,11 @@ export const PopCommit = styled.span`
   margin-bottom: 3px;
   border: 1px solid #284c57;
   box-shadow: 1px 1px 1px #00000094;
-
-  &:hover{
+  }
+  &&:hover{
     opacity: 0.8;
   }
-  &:active{
+  &&:active{
     opacity: 0.5;
   }
 `
@@ -537,6 +566,7 @@ export const BottonCommit = styled.div`
   justify-content: center;
   flex-direction: column;
   top: 81%;
+  z-index: 3;
 
 
   @media screen and (max-width: 840px) { 
@@ -547,10 +577,10 @@ export const BottonCommit = styled.div`
 `
 export const BackgroundBigImg = styled.div`
   display: ${props => props.$ActivPicture ? 'block' : 'none'};
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 5;
-  background: url(${props => props.$ActivPicture ? 'black' : 'none'});
+  background-color: black;
 `
 export const BlockButton = styled.div`
   background-color: #ffffff96;
