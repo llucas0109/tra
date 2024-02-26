@@ -4,6 +4,31 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+
+export const pulse = keyframes` 
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+`
+export const Divloadf = styled.div`
+  width: 150px;
+  height: 150px;
+  display: block;
+  margin: 30px;
+  background-color: #ccc;
+  position: absolute;
+  
+  animation: ${pulse} 1.5s infinite;
+`
 export const BoxLoad = styled(Box)`
   &&{
     display: ${prop => prop.$act? 'none' : 'block' };
@@ -23,6 +48,7 @@ export const FundoLoadImg = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff73;
+  z-index: 1;
   position: absolute;
   z-index: 3;
   display: none;
@@ -141,12 +167,16 @@ export const MainImage = styled.div`
   }
 `
 export const ContainerImages = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    overflow-y: scroll;
-    width: 100%;
-    height: 472px;
-    background-color: #e5e5e5;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  width: 100%;
+  height: 472px;
+  background-color: #e5e5e5;
+  
+  .DivFloat{
+    display: ${(prop) => prop.$act == 'true'?'block':'none'};
+  }
 `
 export const ContainerScroll = styled.div`
   width: 240px;
@@ -176,7 +206,7 @@ export const ListContainer = styled.div`
 `
 export const PictureContainer = styled.div`
   width: 200px;
-  height: 200px;
+  height: 150px;
   /* background: url(${props => props.$AtrPicture ? props.$AtrPicture : ''}) no-repeat center center; */
   background-size: cover;
   margin: 10px;
@@ -184,7 +214,7 @@ export const PictureContainer = styled.div`
 `
 export const Img = styled.img`
   width: 100%;
-  height: 100%;
+  height: auto;
 `
 export const ContainerSerach = styled.div`
 width: 100%;
@@ -429,8 +459,8 @@ export const BoxDiv = styled.div`
   justify-content: center;
   position: absolute;
   border: 1px solid #1565C0;
-  z-index: 1;
-  height: 50%;
+  z-index: 2;
+  height: 60%;
   width: 300px;
   border-radius: 10px 10px 10PX 10PX;
 `
@@ -524,7 +554,7 @@ export const BackgroundBigImg = styled.div`
 `
 export const BlockButton = styled.div`
   background-color: #ffffff96;
-  display: ${prop => prop.$act?"block":"none"};
+  display: ${(prop) => prop.$act == "true" ?"none":"block"};
   width: 100%;
   height: 100%;
   z-index: 5;

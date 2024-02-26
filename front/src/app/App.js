@@ -46,6 +46,7 @@ import { FunkyContainer,
   Grid,
   BackgroundBigImg,
   BoxTextLast,
+  Divloadf,
   BlockButton,
   FundoLoadImg
 } from './style';
@@ -54,6 +55,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';  // npm inst
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { toast } from 'react-toastify';
 import { v4 } from 'uuid'; 
 
 import { useEffect, useState } from 'react';
@@ -61,6 +63,7 @@ import apiServicen8n from '../services/apin8n8.js';
 import apiService from '../services/api.js';
 
 import { useRef } from 'react'; 
+import { element } from 'prop-types';
 const keyboard = require('keyboardjs');
 
 
@@ -78,6 +81,8 @@ const App = () => {
   const [pasta,setpasta] = useState([])
   const [textcommit,settextcommit] = useState('')
   const [ablepag,setablepag] = useState(false)
+  const [digit,sedigit] = useState(false)
+  const [pulse,setpulse] = useState(false)
 
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
@@ -95,7 +100,6 @@ const App = () => {
       setservice(canais); // Atualizando o useState
       
       const promises = canais.map(async (service) => {
-        console.log("canais:  ",  service.nome);
         const { data: servicos } = await apiService.post('/servicos', { Prop: service.nome });
         return servicos;
       });
@@ -108,7 +112,6 @@ const App = () => {
       //-----------------------------------------------------------
 
       const { data } = await apiService.post('/servicos/fotos');
-      console.log("all fotoss             ",data);
       setfotos(data)
     }
 
@@ -125,11 +128,9 @@ const App = () => {
   
   async function dataFilter(ipes) {
     if(ipes.isValid() || null){
-      console.log("ipes :  ",ipes);
       const dataInput = ipes.toISOString().split('T')[0] ;  // Convertendo data
     
       if(dataInput.length > 9) { 
-      console.log("dataInput    ", dataInput, "   file    ",files);
       const DataFilter = contdata && contdata.filter(file => {
         return file.dataConclusao.split('T')[0] == dataInput;
       });
@@ -137,31 +138,19 @@ const App = () => {
       //-------------------------------------
       const ErrorFiles = document.getElementById('ErrorFiles');
       //-------------------------------------
-      console.log("dataInput.length   ",   dataInput.length);
       if(dataInput.length == 0){
-        console.log("Length  muito baixo:   "  );
         ErrorFiles.style.display = 'block'
       }
       }
     }else{
-      console.log("invalida Data");
     }
   };
-  
-  // console.log("servicoscanais:     ", servicoscanais);
-  console.log("patch :   ", patch);
 
-  console.log("pathn8n[0]   ",  pathn8n[0]);
-  console.log("pathn8n[1]   ",  pathn8n[1]);
-  console.log("pathn8n[2]   ",  pathn8n[2]);
-  console.log("pathn8n[3]   ",  pathn8n[3]);
   async function loadServicos(prop,index) {
     let ContainerButton = document.getElementById('ContainerButton')
     let PopCommit = document.getElementById('PopCommit')
     PopCommit.style.display = 'none'
     ContainerButton.style.display = 'none'
-    console.log("Contagem canal :    ", prop);
-    console.log("Contagem index :    ", index);
     setPathn8n([prop]);  // slice(1)  Pega todos os intens que vem depoois da posiçao 1.
     if(click != 0 && click != prop){
       const Nivel = document.getElementById(`${click}`)
@@ -198,7 +187,6 @@ const App = () => {
       const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
       setpasta(data)
       const SomenteData = data.filter(data => data.dataConclusao != null)
-      console.log("filtrar onde nao tem data de conclusao",SomenteData);
       setcontdata(SomenteData)
       setfiles(SomenteData)
       
@@ -211,7 +199,7 @@ const App = () => {
     }
 
   }
-  console.log("pasta dados que preciso.       ",pasta);
+
     async function loadServicosfoto(ipes,dop) {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
@@ -225,7 +213,6 @@ const App = () => {
 
       const data = fotos.filter((fotos) => fotos.servico_id == dop)
       const filterhttp = data.filter((http) => http.servico_id == dop) 
-      console.log("Dados recebidos de imagem direto funcao       ",filterhttp);
       setpicture(filterhttp)
       
       const text = pasta.filter((text) => text.nome == dop)
@@ -235,13 +222,12 @@ const App = () => {
       }else{ 
         BoxText.style.display = 'none'
       }
-
+      setpulse(true)
       if(window.innerWidth < 840){
         const ContainerScroll = document.getElementById('ContainerScroll')
         ContainerScroll.style.display = 'none'
       }
     }
-    console.log('textcommit         ',textcommit);
     function FildIndexPicture(img){
       setexpandimage(img)
       const index = picture.findIndex(picture => picture.foto === img)
@@ -251,10 +237,8 @@ const App = () => {
     function KeyBoardPictureup(moreindex){
       let indexmore = moreindex + 1;
       if (indexmore < picture.length) {
-      console.log("indexmore   ", indexmore);
       picture && picture.forEach((file,index) => {
         if(indexmore == index){
-          console.log("Acrecentou um novo valor a expandimage");
           setexpandimage(file.foto)  
         }
       });
@@ -265,10 +249,8 @@ const App = () => {
     function KeyBoardPicturedown(moreindex){
       let indexmore = moreindex - 1;
       if (indexmore >= 0) {
-      console.log("indexmore   ", indexmore);
       picture && picture.forEach((file,index) => {
         if(indexmore == index){
-          console.log("Acrecentou um novo valor a expandimage");
           setexpandimage(file.foto)  
         }
       });
@@ -277,7 +259,6 @@ const App = () => {
     }
 
   const keyDownHandler = event => {
-    console.log('User pressed: ', event.key);
 
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -285,25 +266,16 @@ const App = () => {
       Buscador()
     }
   };
-    // console.log("indexpicture    ",indexpicture,"    picture.length      ",picture.length);
-    
+
     function up(event) {
       const bigimg = document.getElementById('expanding')
       if(bigimg.style.display == 'block'){ 
 
       if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-        console.log("ArrowLeft or ArrowDown");
         KeyBoardPicturedown(indexpicture)
       }
       if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-        console.log("ArrowRight or ArrowUp");
         KeyBoardPictureup(indexpicture);
-    
-        // Verifique se deve parar de escutar após a execução da lógica
-        console.log("indexpicture    ",indexpicture);
-        if (indexpicture >= picture.length) {
-          console.log("Deve parar de escutar");
-        }
       }
       }
     }
@@ -315,7 +287,6 @@ const App = () => {
       keyboard.bind('esc', Close);
     
     if (expandimage != 0) {
-      console.log("Continua entrando ");
       const img = document.getElementById('expanding');
       const ContenedorExpand = document.getElementById('ContenedorExpand');
       img.style.display = 'block';
@@ -356,8 +327,6 @@ const App = () => {
     }
     async function SendCommit(){
       const text = areatextref.current.value
-      console.log("text   ",text); 
-      console.log("pathn8n   " ,pathn8n);
       await apiService.put('/servicos/commit',{Conect: pathn8n , Commit:text})
     }
 
@@ -372,20 +341,20 @@ const App = () => {
     function CloseCommitfunctin(id){
       const BoxDiv = document.getElementById(`${id}`)
       BoxDiv.style.display = 'none'
+      sedigit(false)
     }
     function OpenCommitfunctin(id,textmenubox){
       if(textmenubox != undefined){ 
         const BoxDiv = document.getElementById(`${id}`)
         const textmenuboxf = document.getElementById(`${textmenubox}`)
-        textmenuboxf.style.display = 'block'
+        textmenuboxf.style.display = 'flex'
         BoxDiv.style.display = 'flex'
       }else{
         const textmenuboxf = document.getElementById(`${id}`)
-        textmenuboxf.style.display = 'block'
+        textmenuboxf.style.display = 'flex'
       }
     }
     async function TextBox(childrem){
-      console.log("TextBox     ", childrem);
       let newarray = pathn8n.splice(3)
       setPathn8n(newarray)
       setPathn8n([...pathn8n,childrem])
@@ -394,14 +363,43 @@ const App = () => {
       await apiService.put('/servicos/status',{Data:pathn8n});
     }
     async function UpdatestatusAprovado(){ 
-      await apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'});
+      
+      // await toas.(apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'}),{
+      //   pending: "Sending...",
+      //   success: "Commit successfully posted",
+      //   error: "Failed to send, please try again"
+      // })
     }
-    // console.log('textcommit.nome:      ',textcommit[0].commit);
-    
    if(servicoscanais[0] != null && ablepag != true ){
     setablepag(true)
    }
 
+  function verificarConteudo(value) {
+    if(value.target.value.length > 5){ 
+      sedigit(true)
+    }else{
+      sedigit(false)
+    }  
+  }
+  function DisBleLoad(id2){
+    const back = document.getElementById(`${id2}`)
+      back.style.display = "none" 
+      setpulse(false)
+  }
+
+  function loadpicture(id,id2){
+    const images = document.getElementById(`${id}`);
+    const divimg = document.getElementById('Blur')
+    images.addEventListener('load',DisBleLoad(id2))
+    console.log('id',picture.length);
+    console.log('divimg.childElementCount       ',divimg.childElementCount);
+    // if( i > picture.length ){   
+    //   const t = document.getElementById("t");
+    //   t.style.display = 'none'
+    // }
+
+  }
+  // toast.success('Cadastro criado com sucesso')
   return(
     <>
     {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
@@ -425,11 +423,11 @@ const App = () => {
                   Commit
                 </BoxText>
               </div>
-              <BoxCaixa ref={areatextref}>
+              <BoxCaixa minLength={5} id='BoxCaixa' ref={areatextref} onInput={verificarConteudo}>
               </BoxCaixa>
               <Grid>
-              <BlockButton $act ={ inputRef?'yes':"no" }></BlockButton>
-              <ButtonSend  id={v4()} onClick={() => {Sharedata('Send'); return Updatestatus()}}>Send</ButtonSend>
+                <BlockButton $act={digit?'true':''} ></BlockButton>
+                <ButtonSend  id={v4()} onClick={() => {Sharedata('Send'); return Updatestatus()}}>Send</ButtonSend>
               </Grid>
             </BoxDiv>
           <VibrantBox id='VibrantBox' act={activebotton? 'Possui dados': null}>
@@ -486,16 +484,24 @@ const App = () => {
             </ContainerScroll>
           </ContenedorData>
           <MainImage>
-            <ContainerImages>
+            <ContainerImages id='Blur'>
               <FundoLoadImg></FundoLoadImg>
               {  
-              picture && picture.map(picture =>{ 
-                console.log('picture.foto    ',picture.foto);
+              picture && picture.map(picture =>{
+                const iid = v4() 
+                const iid2 = v4() 
                 return ( 
-                <PictureContainer onClick={() => FildIndexPicture(picture.foto)}>
-                  <Img id={v4()} src={picture.foto} />
+                <PictureContainer    onClick={() => FildIndexPicture(picture.foto)}>
+                  <Divloadf id={iid2} className='DivFloat' $act={pulse?'true':null} ></Divloadf>
+                  <Img id={ iid } key={v4()} onLoad={() => loadpicture(iid,iid2)} src={picture.foto} 
+                  loading="lazy"
+                  width="500" 
+                  height="300" 
+                    />
+                    
                 </PictureContainer>
               )})}
+                
             </ContainerImages>
             <BoxDiv id='BoxLastCommit'>
               <div>
