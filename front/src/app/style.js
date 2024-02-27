@@ -44,7 +44,7 @@ export const FundoLoad = styled.div`
   height: 100vh;
   background-color: #ffffff75;
   position: absolute;
-  z-index: 3;
+  z-index: 5;
 `
 export const FundoLoadImg = styled.div`
   width: 100%;
@@ -176,6 +176,9 @@ export const ContainerImages = styled.div`
   height: 472px;
   background-color: #e5e5e5;
   
+  &::-webkit-scrollbar{ // Aditar scrollbar
+    
+  }
   .DivFloat{
     display: ${(prop) => prop.$act == 'true'?'block':'none'};
   }
@@ -209,6 +212,7 @@ export const ListContainer = styled.div`
 export const PictureContainer = styled.div`
   width: 200px;
   height: 150px;
+  box-shadow: 5px 5px 13px -1px #0000006b;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 100%;
@@ -408,6 +412,24 @@ export const ExpandContainerscrooll = styled.div`
  }
   
 `
+export const FitaBAckScroll = styled.span`
+  width: 53px;
+  height: 50px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 7px;
+  border: 2px solid #9d9c9cc7;
+  color: #292929;
+
+ &:hover{
+  background-color: #9d9c9cc7;
+ }
+ &:active{
+  opacity: 0.6;
+ }
+`
 //------------Animacoes-------------------------------
  export const AnimationMenudown = keyframes` 
   1%{left: 2%} 
@@ -441,7 +463,7 @@ export const Fita = styled.span`
     padding-left: 3px;    
     top: 53px;
     left: 61%;
-    animation: ${(p) => (p.act ? AniPostitionMoveFitadown: AniPostitionMoveFitaup)} forwards 1s;  // forwards mantem as configuracoes do ultimo frame
+    animation: ${(p) => (p.act ? AniPostitionMoveFitaup : AniPostitionMoveFitadown )} forwards 0.5s;  // forwards mantem as configuracoes do ultimo frame
   }  
 `
 
@@ -459,7 +481,7 @@ export const VibrantBox = styled.div`
     top: 10px;
     border-radius: 10px 10px 0px 0px;
     left: 2%; 
-    animation: ${(p) => (p.act ? AnimationMenudown: AnimationMenuup)} forwards 1s; // forwards mantem as configuracoes do ultimo frame
+    animation: ${(p) => (p.act ? AnimationMenuup : AnimationMenudown )} forwards 0.5s; // forwards mantem as configuracoes do ultimo frame
   }
   @media screen and (max-width: 550px){
     min-width: 59%;
@@ -488,7 +510,7 @@ export const BoxDiv = styled.div`
   justify-content: center;
   position: absolute;
   border: 1px solid #1565C0;
-  z-index: 2;
+  z-index: 4;
   height: 42%;
   width: 300px;
   border-radius: 10px 10px 10PX 10PX;
@@ -537,7 +559,7 @@ export const PopCommit = styled(Button)`
   &&{display: none;
   background-color: #fff;
   cursor: pointer;
-  width: 110px;
+  width: 145px;
   height: 31px;
   border-radius: 15px 15px 15px 15px;
   align-self: flex-end;

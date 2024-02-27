@@ -49,6 +49,7 @@ import { FunkyContainer,
   Rotation,
   BAckTorow,
   Divloadf,
+  FitaBAckScroll,
   BlockButton,
   FundoLoadImg
 } from './style';
@@ -69,6 +70,7 @@ import apiService from '../services/api.js';
 import { useRef } from 'react'; 
 import { element } from 'prop-types';
 import pix from './pexels-cz-jen-16188539.jpg'
+import Hammer from 'hammerjs';
 const keyboard = require('keyboardjs');
 
 
@@ -231,6 +233,8 @@ const App = () => {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
       let BoxText = document.getElementById('BoxText')
+      let FitaBAckScroll = document.getElementById('FitaBAckScroll')
+      FitaBAckScroll.style.display = 'flex'
       PopCommit.style.display = 'flex'
       ContainerButton.style.display = 'flex'
 
@@ -309,6 +313,7 @@ const App = () => {
       }
     }
     
+    const swipeDetector = new Hammer(document.getElementById('expanding'));
       keyboard.bind('up', up);
       keyboard.bind('down', up);
       keyboard.bind('left', up);
@@ -392,8 +397,7 @@ const App = () => {
       await apiService.put('/servicos/status',{Data:pathn8n});
     }
     async function UpdatestatusAprovado(){ 
-      
-      // await toas.(apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'}),{
+      // await toast.(apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'}),{
       //   pending: "Sending...",
       //   success: "Commit successfully posted",
       //   error: "Failed to send, please try again"
@@ -429,9 +433,18 @@ const App = () => {
   // toast.success('Cadastro criado com sucesso')
   console.log("load ", pulse);
 
-  const onInit = () => {
-    console.log('lightGallery has been initialized');
+  function CloseAndOpen(id) {
+    const obj = document.getElementById(`${id}`);
+    let FitaBAckScroll = document.getElementById('FitaBAckScroll')
+    console.log('obj     ',obj);
+    if(obj.style.display == 'none'){
+      obj.style.display = 'block'
+    }else{
+      obj.style.display = 'none'
+    }    
+    FitaBAckScroll.style.display = 'block'
   };
+
   return(
     <>
     {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
@@ -521,7 +534,11 @@ const App = () => {
               ))}
             </ContainerScroll>
           </ContenedorData>
-          <BAckTorow />
+          <FitaBAckScroll id='FitaBAckScroll' onClick={() => CloseAndOpen('ContainerScroll')}>          
+            <span id='difrenciado' class="material-symbols-outlined">
+              unfold_more_double
+            </span>
+          </FitaBAckScroll>
           <MainImage>
             <ContainerImages id='Blur'>
               <FundoLoadImg></FundoLoadImg>
@@ -556,7 +573,7 @@ const App = () => {
               </LastCommit>
             </BoxDiv>
             <BottonCommit>
-              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
+              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>"REASON OF STATUS</PopCommit>
               <ContainerButton id='ContainerButton'>
                 <ButtonGreen  onClick={() => {TextBox("Aprovado"); return UpdatestatusAprovado()}} variant="contained"  disableElevation>
                   Approved
@@ -567,7 +584,7 @@ const App = () => {
                 </ButtonPendente>
               
                 <ButtonRed onClick={() => {TextBox("Reprovado");  return OpenCommitfunctin('BoxDiv','BoxText')}} variant="contained" disableElevation>
-                  Disapproved
+                  REJECTED
                 </ButtonRed>
               </ContainerButton>
             </BottonCommit>
