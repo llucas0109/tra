@@ -188,10 +188,17 @@ export const ContainerScroll = styled.div`
   height: 100%;
   overflow-y:  hidden;
   @media screen and (max-width: 840px) {
-    height: 65%;
+    height: 92%;
     width: 100%;
   } 
 `
+export const AlertBrowse = styled.div`
+  display: none;
+  width: 95%;
+  height: 100px;
+  margin: 10px;
+`
+
 export const ItemList = styled.div`
  position: relative;
  flex-direction:column;
@@ -413,22 +420,26 @@ export const ExpandContainerscrooll = styled.div`
   
 `
 export const FitaBAckScroll = styled.span`
-  width: 53px;
-  height: 50px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 7px;
-  border: 2px solid #9d9c9cc7;
-  color: #292929;
+  @media screen and (max-width: 840px) {
+    width: 53px;
+    height: 50px;
+    border-radius: 5px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-left: 7px;
+    border: 2px solid #9d9c9cc7;
+    color: #292929;
+    cursor: pointer;
 
- &:hover{
-  background-color: #9d9c9cc7;
- }
- &:active{
-  opacity: 0.6;
- }
+  &:hover{
+    background-color: #9d9c9cc7;
+  }
+  &:active{
+    opacity: 0.6;
+  } 
+}
+
 `
 //------------Animacoes-------------------------------
  export const AnimationMenudown = keyframes` 
@@ -559,7 +570,7 @@ export const PopCommit = styled(Button)`
   &&{display: none;
   background-color: #fff;
   cursor: pointer;
-  width: 145px;
+  width: 200px;
   height: 31px;
   border-radius: 15px 15px 15px 15px;
   align-self: flex-end;

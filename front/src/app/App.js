@@ -50,6 +50,7 @@ import { FunkyContainer,
   BAckTorow,
   Divloadf,
   FitaBAckScroll,
+  AlertBrowse,
   BlockButton,
   FundoLoadImg
 } from './style';
@@ -59,6 +60,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { toast } from 'react-toastify';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 //-------------------------------------------
 //-------------------------------------------
 
@@ -70,7 +73,6 @@ import apiService from '../services/api.js';
 import { useRef } from 'react'; 
 import { element } from 'prop-types';
 import pix from './pexels-cz-jen-16188539.jpg'
-import Hammer from 'hammerjs';
 const keyboard = require('keyboardjs');
 
 
@@ -136,22 +138,24 @@ const App = () => {
 
   
   async function dataFilter(ipes) {
-    if(ipes.isValid() || null){
+    console.log('ipes    ',ipes);
+    const MainImage = document.getElementById('MainImage');
+    const FitaBAckScroll = document.getElementById('FitaBAckScroll');
+    MainImage.style.display = 'none';
+    FitaBAckScroll.click();
+    FitaBAckScroll.style.display = 'none';
+
+    if(ipes.isValid()|| null){      
       const dataInput = ipes.toISOString().split('T')[0] ;  // Convertendo data
-    
-      if(dataInput.length > 9) { 
+      if(dataInput.length > 9) {      
       const DataFilter = contdata && contdata.filter(file => {
         return file.dataConclusao.split('T')[0] == dataInput;
       });
-      setfiles(DataFilter)
+      
+      setfiles(DataFilter);
       //-------------------------------------
-      const ErrorFiles = document.getElementById('ErrorFiles');
-      //-------------------------------------
-      if(dataInput.length == 0){
-        ErrorFiles.style.display = 'block'
+      
       }
-      }
-    }else{
     }
   };
 
@@ -233,8 +237,9 @@ const App = () => {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
       let BoxText = document.getElementById('BoxText')
-      let FitaBAckScroll = document.getElementById('FitaBAckScroll')
-      FitaBAckScroll.style.display = 'flex'
+      const MainImage = document.getElementById('MainImage')
+      MainImage.style.display = 'flex'
+      
       PopCommit.style.display = 'flex'
       ContainerButton.style.display = 'flex'
 
@@ -257,6 +262,8 @@ const App = () => {
       setpulse(true)
       if(window.innerWidth < 840){
         const ContainerScroll = document.getElementById('ContainerScroll')
+        let FitaBAckScroll = document.getElementById('FitaBAckScroll')
+        FitaBAckScroll.style.display = 'flex'
         ContainerScroll.style.display = 'none'
       }
 
@@ -313,7 +320,7 @@ const App = () => {
       }
     }
     
-    const swipeDetector = new Hammer(document.getElementById('expanding'));
+    // const swipeDetector = new Hammer(document.getElementById('expanding'));
       keyboard.bind('up', up);
       keyboard.bind('down', up);
       keyboard.bind('left', up);
@@ -431,16 +438,15 @@ const App = () => {
 
   }
   // toast.success('Cadastro criado com sucesso')
-  console.log("load ", pulse);
 
   function CloseAndOpen(id) {
     const obj = document.getElementById(`${id}`);
     let FitaBAckScroll = document.getElementById('FitaBAckScroll')
     console.log('obj     ',obj);
-    if(obj.style.display == 'none'){
-      obj.style.display = 'block'
-    }else{
+    if(obj.style.display == 'block' || obj.style.display == 'flex' ){
       obj.style.display = 'none'
+    }else{
+      obj.style.display = 'block'
     }    
     FitaBAckScroll.style.display = 'block'
   };
@@ -516,6 +522,11 @@ const App = () => {
               </DemoContainer>
             </LocalizationProvider>
             </InitContainerScroll>
+            <AlertBrowse id='AlertBrowse'>
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="warning">No services found</Alert>
+              </Stack>
+            </AlertBrowse>
           <ContenedorData id='ContainerScroll'>
             <ContainerScroll>
               {work && work.map(wk => (
@@ -539,7 +550,7 @@ const App = () => {
               unfold_more_double
             </span>
           </FitaBAckScroll>
-          <MainImage>
+          <MainImage id='MainImage'>
             <ContainerImages id='Blur'>
               <FundoLoadImg></FundoLoadImg>
               {  
@@ -573,7 +584,7 @@ const App = () => {
               </LastCommit>
             </BoxDiv>
             <BottonCommit>
-              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>"REASON OF STATUS</PopCommit>
+              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>REASON OF STATUS</PopCommit>
               <ContainerButton id='ContainerButton'>
                 <ButtonGreen  onClick={() => {TextBox("Aprovado"); return UpdatestatusAprovado()}} variant="contained"  disableElevation>
                   Approved
