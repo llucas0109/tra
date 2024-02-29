@@ -124,6 +124,7 @@ export const FunkyContainer = styled.div`
 
 export const DynamicWrapper = styled.div`
   background-color: #d0d0d0;
+  background-color: #323639;
   display: flex;
   width: 95%;
   height: 100%;
@@ -135,14 +136,14 @@ export const DynamicWrapper = styled.div`
 `;
 
 export const QuirkySection = styled.div`
-  background-color: #c0c0c0;
+  background-color: #394142;
   border-radius: 10px 10px 10px 10px;
   padding: 9px;
   margin: 0px 25px 16px 25px;
 `;
 
 export const ColorfulPanel = styled.div`
-  background-color: #b0b0b0;
+  background-color: #454A4E;
   padding: 11px 11px 11px 11px;
   border-radius: 10px 10px 10px 10px;
   margin: 7px;
@@ -158,6 +159,7 @@ cursor: pointer;
 export const MainImage = styled.div`
   width: 70%;
   height: 100%;
+  background-color: #323639;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,7 +176,7 @@ export const ContainerImages = styled.div`
   overflow-y: scroll;
   width: 100%;
   height: 472px;
-  background-color: #e5e5e5;
+  background-color: #454A4E;
   
   &::-webkit-scrollbar{ // Aditar scrollbar
     
@@ -479,7 +481,7 @@ export const Fita = styled.span`
 `
 
 export const VibrantBox = styled.div`  
-  background-color: #D0D0D0;
+  background-color: #323639;
   min-width: 300px;
   height: 100%;
   display: block;

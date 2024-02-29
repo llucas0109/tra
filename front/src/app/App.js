@@ -450,7 +450,7 @@ const App = () => {
     }    
     FitaBAckScroll.style.display = 'block'
   };
-
+  navigator.touch
   return(
     <>
     {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
