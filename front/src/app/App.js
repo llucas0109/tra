@@ -46,7 +46,11 @@ import { FunkyContainer,
   Grid,
   BackgroundBigImg,
   BoxTextLast,
+  Rotation,
+  BAckTorow,
   Divloadf,
+  FitaBAckScroll,
+  AlertBrowse,
   BlockButton,
   FundoLoadImg
 } from './style';
@@ -56,14 +60,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { toast } from 'react-toastify';
-import { v4 } from 'uuid'; 
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+//-------------------------------------------
+//-------------------------------------------
 
+import { v4 } from 'uuid'; 
 import { useEffect, useState } from 'react';
 import apiServicen8n from '../services/apin8n8.js';
 import apiService from '../services/api.js';
 
 import { useRef } from 'react'; 
 import { element } from 'prop-types';
+import pix from './pexels-cz-jen-16188539.jpg'
 const keyboard = require('keyboardjs');
 
 
@@ -82,7 +91,9 @@ const App = () => {
   const [textcommit,settextcommit] = useState('')
   const [ablepag,setablepag] = useState(false)
   const [digit,sedigit] = useState(false)
-  const [pulse,setpulse] = useState(false)
+  const [pulse,setpulse] = useState(true)
+  const [servcesfillter,setservcesfillter] = useState('')
+  const [clientY,setclientY] = useState(0)
 
 //----------------- Local onde Sera feito preLoad---------------------
   const [servicoscanais,setservicoscanais] = useState([])
@@ -112,6 +123,7 @@ const App = () => {
       //-----------------------------------------------------------
 
       const { data } = await apiService.post('/servicos/fotos');
+      
       setfotos(data)
     }
 
@@ -127,22 +139,23 @@ const App = () => {
 
   
   async function dataFilter(ipes) {
-    if(ipes.isValid() || null){
+    const MainImage = document.getElementById('MainImage');
+    const FitaBAckScroll = document.getElementById('FitaBAckScroll');
+    MainImage.style.display = 'none';
+    FitaBAckScroll.click();
+    FitaBAckScroll.style.display = 'none';
+
+    if(ipes.isValid()|| null){      
       const dataInput = ipes.toISOString().split('T')[0] ;  // Convertendo data
-    
-      if(dataInput.length > 9) { 
+      if(dataInput.length > 9) {      
       const DataFilter = contdata && contdata.filter(file => {
         return file.dataConclusao.split('T')[0] == dataInput;
       });
-      setfiles(DataFilter)
+      
+      setfiles(DataFilter);
       //-------------------------------------
-      const ErrorFiles = document.getElementById('ErrorFiles');
-      //-------------------------------------
-      if(dataInput.length == 0){
-        ErrorFiles.style.display = 'block'
+      
       }
-      }
-    }else{
     }
   };
 
@@ -168,6 +181,7 @@ const App = () => {
       }
     }
   }
+  const [usd,setusd] = useState([])
   async function loadServicoswk(prop,ipes) {
     let ContainerButton = document.getElementById('ContainerButton')
     let PopCommit = document.getElementById('PopCommit')
@@ -187,23 +201,40 @@ const App = () => {
       const { data } = await apiService.post('/servicos',{Prop:prop,Ipes:ipes});
       setpasta(data)
       const SomenteData = data.filter(data => data.dataConclusao != null)
-      setcontdata(SomenteData)
-      setfiles(SomenteData)
-      
-    }
 
+      // const NewSomenteData = SomenteData && SomenteData.forEach( (ser) => {
+      //   const valoretorne = fotos.filter(wk => {
+      //     return ser.nome == wk.servico_id
+      //   })
+        
+      //  return 
+      // });
+      let SomenteData2 = []
+      for(let i = 0; i < SomenteData.length;i++){
+        for(let j = 0; j < fotos.length;j++){
+          if(fotos[j].servico_id == SomenteData[i].nome){
+            SomenteData2.push(SomenteData[i]);
+            break
+          }
+        }
+      }  
+
+      setcontdata(SomenteData2)
+      setfiles(SomenteData2)
+    }
     if(window.innerWidth < 840){
       const ContainerScroll = document.getElementById('ContainerScroll')
       ContainerScroll.style.display = 'block'
       // Fita.style.animation = `${AniPostitionMoveFita} 2s ease`
     }
-
   }
-
     async function loadServicosfoto(ipes,dop) {
       let ContainerButton = document.getElementById('ContainerButton')
       let PopCommit = document.getElementById('PopCommit')
       let BoxText = document.getElementById('BoxText')
+      const MainImage = document.getElementById('MainImage')
+      MainImage.style.display = 'flex'
+      
       PopCommit.style.display = 'flex'
       ContainerButton.style.display = 'flex'
 
@@ -222,11 +253,15 @@ const App = () => {
       }else{ 
         BoxText.style.display = 'none'
       }
+      
       setpulse(true)
       if(window.innerWidth < 840){
         const ContainerScroll = document.getElementById('ContainerScroll')
+        let FitaBAckScroll = document.getElementById('FitaBAckScroll')
+        FitaBAckScroll.style.display = 'flex'
         ContainerScroll.style.display = 'none'
       }
+
     }
     function FildIndexPicture(img){
       setexpandimage(img)
@@ -271,15 +306,16 @@ const App = () => {
       const bigimg = document.getElementById('expanding')
       if(bigimg.style.display == 'block'){ 
 
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp' ) {
         KeyBoardPicturedown(indexpicture)
       }
-      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown' ) {
         KeyBoardPictureup(indexpicture);
       }
       }
     }
     
+    // const swipeDetector = new Hammer(document.getElementById('expanding'));
       keyboard.bind('up', up);
       keyboard.bind('down', up);
       keyboard.bind('left', up);
@@ -363,8 +399,7 @@ const App = () => {
       await apiService.put('/servicos/status',{Data:pathn8n});
     }
     async function UpdatestatusAprovado(){ 
-      
-      // await toas.(apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'}),{
+      // await toast.(apiService.put('/servicos/status',{Data:pathn8n,Status:'Aprovado'}),{
       //   pending: "Sending...",
       //   success: "Commit successfully posted",
       //   error: "Failed to send, please try again"
@@ -381,18 +416,14 @@ const App = () => {
       sedigit(false)
     }  
   }
-  function DisBleLoad(id2){
-    const back = document.getElementById(`${id2}`)
-      back.style.display = "none" 
-      setpulse(false)
+  function DisBleLoad(){
+    setpulse(false)
   }
 
   function loadpicture(id,id2){
     const images = document.getElementById(`${id}`);
     const divimg = document.getElementById('Blur')
     images.addEventListener('load',DisBleLoad(id2))
-    console.log('id',picture.length);
-    console.log('divimg.childElementCount       ',divimg.childElementCount);
     // if( i > picture.length ){   
     //   const t = document.getElementById("t");
     //   t.style.display = 'none'
@@ -400,20 +431,68 @@ const App = () => {
 
   }
   // toast.success('Cadastro criado com sucesso')
+
+  function CloseAndOpen(id) {
+    const obj = document.getElementById(`${id}`);
+    let FitaBAckScroll = document.getElementById('FitaBAckScroll')
+    if(obj.style.display == 'block' || obj.style.display == 'flex' ){
+      obj.style.display = 'none'
+    }else{
+      obj.style.display = 'block'
+    }    
+    FitaBAckScroll.style.display = 'block'
+  };
+
+  const [posicition,setposicition] = useState(0)
+
+  function handleDrag (event){
+    if(posicition == 0){
+      setposicition(event.touches[0].clientY)
+    }
+    console.log(event.touches[0].clientY);
+
+    const bigimg = document.getElementById('expanding')
+      if(bigimg.style.display == 'block'){ 
+
+        if (event.touches[0].clientY < (posicition - 15) ) {
+          console.log("arratou para baixo");
+        }
+        // if (  ) {
+        
+        // }
+      }
+
+    // if(move < -50){
+    //   console.log('-50');
+    //   up(false)
+    // }
+    // if(move > 50) {
+    //   console.log('50');
+    //   up(true)
+    // }
+  };
+
+  
+
   return(
     <>
     {/* <img src={'https://illuminatenet.com/Form_Brightspeed/fotos_illuminate/Renata/ELTNTNXA-BUTTSPLICE37-0.jpg'} /> */}
     <FunkyContainer>
       <FundoLoad id='FundoLoad' $act={ablepag? 'true' : null}></FundoLoad>
+      {/* <BackgroundBigImg id='BackgroundBigImg'  $ActivPicture={expandimage} /> */}
       <BoxLoad id='BoxLoad' sx={{ display: 'flex' }} $act={ablepag? 'true' : null}>
         <LoadCircularProgress />
       </BoxLoad>
-        <BackgroundBigImg />
-        <Expanding id='expanding' $ActivPicture={expandimage}>
-          <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
-          close
-          </ContenedorExpand>
+        <Expanding id='expanding' $ActivPicture={expandimage} src={expandimage} draggable='true' onTouchMove={e => handleDrag(e)}>
         </Expanding>
+        {/* <Icons> */}
+        <ContenedorExpand id='ContenedorExpand' className = "material-symbols-outlined" onClick={() => Close()} >
+          close
+        </ContenedorExpand>
+        <Rotation class="material-symbols-outlined">
+          screen_rotation
+        </Rotation>
+        {/* </Icons> */}
             <BoxDiv id='BoxDiv'>
               <div>
                 <CloseCommit className = "material-symbols-outlined" onClick={() => CloseCommitfunctin('BoxDiv')} >
@@ -458,15 +537,20 @@ const App = () => {
           </Serch>
         </Container>
         <DynamicWrapper>
-          <ContenedorData>
-            <InitContainerScroll>
+        <InitContainerScroll>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}  >
                 <DatePicker label="Data" onChange={dataFilter} />
               </DemoContainer>
             </LocalizationProvider>
             </InitContainerScroll>
-            <ContainerScroll id='ContainerScroll'>
+            <AlertBrowse id='AlertBrowse'>
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="warning">No services found</Alert>
+              </Stack>
+            </AlertBrowse>
+          <ContenedorData id='ContainerScroll'>
+            <ContainerScroll>
               {work && work.map(wk => (
               <ItemList id={wk.nome} style={{display: 'none'}}>
                 <Error id='ErrorFiles' > Nenhum valor encontrado relacionado a pesquisa </Error>
@@ -483,7 +567,12 @@ const App = () => {
               ))}
             </ContainerScroll>
           </ContenedorData>
-          <MainImage>
+          <FitaBAckScroll id='FitaBAckScroll' onClick={() => CloseAndOpen('ContainerScroll')}>          
+            <span id='difrenciado' class="material-symbols-outlined">
+              unfold_more_double
+            </span>
+          </FitaBAckScroll>
+          <MainImage id='MainImage'>
             <ContainerImages id='Blur'>
               <FundoLoadImg></FundoLoadImg>
               {  
@@ -492,12 +581,12 @@ const App = () => {
                 const iid2 = v4() 
                 return ( 
                 <PictureContainer    onClick={() => FildIndexPicture(picture.foto)}>
-                  <Divloadf id={iid2} className='DivFloat' $act={pulse?'true':null} ></Divloadf>
+                  <Divloadf id={iid2} $act={pulse?'true':'false'} ></Divloadf>
                   <Img id={ iid } key={v4()} onLoad={() => loadpicture(iid,iid2)} src={picture.foto} 
                   loading="lazy"
                   width="500" 
                   height="300" 
-                    />
+                  />
                     
                 </PictureContainer>
               )})}
@@ -517,7 +606,7 @@ const App = () => {
               </LastCommit>
             </BoxDiv>
             <BottonCommit>
-              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>Last Commit</PopCommit>
+              <PopCommit id={'PopCommit'} onClick={() => OpenCommitfunctin('BoxLastCommit')}>REASON OF STATUS</PopCommit>
               <ContainerButton id='ContainerButton'>
                 <ButtonGreen  onClick={() => {TextBox("Aprovado"); return UpdatestatusAprovado()}} variant="contained"  disableElevation>
                   Approved
@@ -528,7 +617,7 @@ const App = () => {
                 </ButtonPendente>
               
                 <ButtonRed onClick={() => {TextBox("Reprovado");  return OpenCommitfunctin('BoxDiv','BoxText')}} variant="contained" disableElevation>
-                  Disapproved
+                  REJECTED
                 </ButtonRed>
               </ContainerButton>
             </BottonCommit>

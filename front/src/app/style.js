@@ -21,12 +21,14 @@ export const pulse = keyframes`
 `
 export const Divloadf = styled.div`
   width: 150px;
-  height: 150px;
+  height: 150px; 
+  grid-row: 1/2;
+  grid-column: 1/2; 
   display: block;
+  display: ${(prop) => prop.$act == 'true'? 'block': 'none'};
   margin: 30px;
   background-color: #ccc;
-  position: absolute;
-  
+  z-index: 1;
   animation: ${pulse} 1.5s infinite;
 `
 export const BoxLoad = styled(Box)`
@@ -42,7 +44,7 @@ export const FundoLoad = styled.div`
   height: 100vh;
   background-color: #ffffff75;
   position: absolute;
-  z-index: 3;
+  z-index: 5;
 `
 export const FundoLoadImg = styled.div`
   width: 100%;
@@ -122,6 +124,7 @@ export const FunkyContainer = styled.div`
 
 export const DynamicWrapper = styled.div`
   background-color: #d0d0d0;
+  background-color: #323639;
   display: flex;
   width: 95%;
   height: 100%;
@@ -133,14 +136,14 @@ export const DynamicWrapper = styled.div`
 `;
 
 export const QuirkySection = styled.div`
-  background-color: #c0c0c0;
+  background-color: #394142;
   border-radius: 10px 10px 10px 10px;
   padding: 9px;
   margin: 0px 25px 16px 25px;
 `;
 
 export const ColorfulPanel = styled.div`
-  background-color: #b0b0b0;
+  background-color: #454A4E;
   padding: 11px 11px 11px 11px;
   border-radius: 10px 10px 10px 10px;
   margin: 7px;
@@ -156,6 +159,7 @@ cursor: pointer;
 export const MainImage = styled.div`
   width: 70%;
   height: 100%;
+  background-color: #323639;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,8 +176,11 @@ export const ContainerImages = styled.div`
   overflow-y: scroll;
   width: 100%;
   height: 472px;
-  background-color: #e5e5e5;
+  background-color: #454A4E;
   
+  &::-webkit-scrollbar{ // Aditar scrollbar
+    
+  }
   .DivFloat{
     display: ${(prop) => prop.$act == 'true'?'block':'none'};
   }
@@ -183,10 +190,17 @@ export const ContainerScroll = styled.div`
   height: 100%;
   overflow-y:  hidden;
   @media screen and (max-width: 840px) {
-    height: 65%;
+    height: 92%;
     width: 100%;
   } 
 `
+export const AlertBrowse = styled.div`
+  display: none;
+  width: 95%;
+  height: 100px;
+  margin: 10px;
+`
+
 export const ItemList = styled.div`
  position: relative;
  flex-direction:column;
@@ -207,6 +221,10 @@ export const ListContainer = styled.div`
 export const PictureContainer = styled.div`
   width: 200px;
   height: 150px;
+  box-shadow: 5px 5px 13px -1px #0000006b;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100%;
   /* background: url(${props => props.$AtrPicture ? props.$AtrPicture : ''}) no-repeat center center; */
   background-size: cover;
   margin: 10px;
@@ -215,6 +233,9 @@ export const PictureContainer = styled.div`
 export const Img = styled.img`
   width: 100%;
   height: auto;
+  grid-row: 1/2;
+  grid-column: 1/2;
+  z-index: 2;
 `
 export const ContainerSerach = styled.div`
 width: 100%;
@@ -280,34 +301,53 @@ export const BottonSerch = styled.a`
   cursor: pointer;
 
 `
-export const Expanding = styled.div`
+export const Expanding = styled.img`
   display: none;
   position: absolute;
   width: 90%;
-  height: 90%;
   z-index: 6;
-  background: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
+  transform: rotate(90deg);
+  padding: -70px -70px;
+  background-image: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
   border: 1px solid black;
   margin: 10px;
-  box-shadow: 0px 0px 0 100px #000000a8;
+  box-shadow: 0px 0px 0 500px #000000a8;
 
 `
+export const Rotation = styled.span`
+display: none;
+  position: absolute;
+  font-size: 57px;
+  background-color: #00000096;
+  z-index: 7;
+  top: 2%;
+  left: 50%;
+  cursor: pointer;
+  border-radius: 10px;
+  color: #ffffff82;
+  cursor: pointer;
+  &:hover{
+    opacity: 0.8;
+  }
+`
+
 export const ContenedorExpand = styled.span`
   position: absolute;
   display: none;
-  font-size: 70px;
-  background-color: #00000078;
-  z-index: 2;
-  top: 5%;
-  left: 5%;
+  font-size: 57px;
+  background-color: #00000096;
+  z-index: 7;
+  top: 2%;
+  left: 75%;
   cursor: pointer;
-  top: 140px;
-  left: 30px;
+  border-radius: 10px;
+  color: #ffffff82;
+  cursor: pointer;
   &:hover{
-    
+    opacity: 0.8;
   }
 `
 export const ContainerButton =  styled.div`
@@ -359,10 +399,13 @@ export const Error =  styled.p`
   font-size: 13px;
   
 `
+export const BAckTorow = styled.div`
+
+`
 export const ContenedorData = styled.div`
    
    @media screen and (max-width: 840px) {
-      height: 350px;
+      height: 95%;
    }
 `
 export const InitContainerScroll = styled.div`
@@ -378,11 +421,32 @@ export const ExpandContainerscrooll = styled.div`
  }
   
 `
+export const FitaBAckScroll = styled.span`
+  @media screen and (max-width: 840px) {
+    width: 53px;
+    height: 50px;
+    border-radius: 5px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-left: 7px;
+    border: 2px solid #9d9c9cc7;
+    color: #292929;
+    cursor: pointer;
+
+  &:hover{
+    background-color: #9d9c9cc7;
+  }
+  &:active{
+    opacity: 0.6;
+  } 
+}
+
+`
 //------------Animacoes-------------------------------
  export const AnimationMenudown = keyframes` 
   1%{left: 2%} 
-  99%{left: -61%}
-  100%{display: none}
+  100%{left: -61%}
  `
  export const AnimationMenuup = keyframes` 
   1%{left: -61%} 
@@ -412,16 +476,16 @@ export const Fita = styled.span`
     padding-left: 3px;    
     top: 53px;
     left: 61%;
-    animation: ${(p) => (p.act ? AniPostitionMoveFitadown: AniPostitionMoveFitaup)} forwards 1s;  // forwards mantem as configuracoes do ultimo frame
+    animation: ${(p) => (p.act ? AniPostitionMoveFitaup : AniPostitionMoveFitadown )} forwards 0.5s;  // forwards mantem as configuracoes do ultimo frame
   }  
 `
 
 export const VibrantBox = styled.div`  
-  background-color: #D0D0D0;
+  background-color: #323639;
   min-width: 300px;
   height: 100%;
   display: block;
-  z-index: 2;
+  z-index: 4;
 
   @media screen and (max-width: 840px){
     display: block;
@@ -430,7 +494,7 @@ export const VibrantBox = styled.div`
     top: 10px;
     border-radius: 10px 10px 0px 0px;
     left: 2%; 
-    animation: ${(p) => (p.act ? AnimationMenudown: AnimationMenuup)} forwards 1s; // forwards mantem as configuracoes do ultimo frame
+    animation: ${(p) => (p.act ? AnimationMenuup : AnimationMenudown )} forwards 0.5s; // forwards mantem as configuracoes do ultimo frame
   }
   @media screen and (max-width: 550px){
     min-width: 59%;
@@ -459,8 +523,8 @@ export const BoxDiv = styled.div`
   justify-content: center;
   position: absolute;
   border: 1px solid #1565C0;
-  z-index: 2;
-  height: 60%;
+  z-index: 4;
+  height: 42%;
   width: 300px;
   border-radius: 10px 10px 10PX 10PX;
 `
@@ -504,11 +568,11 @@ export const LastCommit = styled.div`
   width: 90%;
   border: 1px solid black;
 ` 
-export const PopCommit = styled.span`
-  display: none;
+export const PopCommit = styled(Button)`
+  &&{display: none;
   background-color: #fff;
   cursor: pointer;
-  width: 96px;
+  width: 200px;
   height: 31px;
   border-radius: 15px 15px 15px 15px;
   align-self: flex-end;
@@ -518,11 +582,11 @@ export const PopCommit = styled.span`
   margin-bottom: 3px;
   border: 1px solid #284c57;
   box-shadow: 1px 1px 1px #00000094;
-
-  &:hover{
+  }
+  &&:hover{
     opacity: 0.8;
   }
-  &:active{
+  &&:active{
     opacity: 0.5;
   }
 `
@@ -537,6 +601,7 @@ export const BottonCommit = styled.div`
   justify-content: center;
   flex-direction: column;
   top: 81%;
+  z-index: 3;
 
 
   @media screen and (max-width: 840px) { 
@@ -547,10 +612,10 @@ export const BottonCommit = styled.div`
 `
 export const BackgroundBigImg = styled.div`
   display: ${props => props.$ActivPicture ? 'block' : 'none'};
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 5;
-  background: url(${props => props.$ActivPicture ? 'black' : 'none'});
+  background-color: black;
 `
 export const BlockButton = styled.div`
   background-color: #ffffff96;
