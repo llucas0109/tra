@@ -11,8 +11,12 @@ export default createGlobalStyle`
     font-weight: 300;
     font-style: normal;
   }
+  html, body{
+    /* overscroll-behavior: none; */
+  }
 
  *{
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

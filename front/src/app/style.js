@@ -3,7 +3,41 @@ import { Keymenu } from './styledkey';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { ToastContainer } from "react-toastify";
 
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';  // npm install dayjs
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+export const DemoContainer1 = styled(DemoContainer)`
+  
+`
+export const AdapterDayjs1 = styled(AdapterDayjs)`
+
+`
+export const LocalizationProvider1 = styled(LocalizationProvider)`
+
+`
+export const DatePicker1 = styled(DatePicker)`
+
+`
+
+export const StyledContainer = styled(ToastContainer)`
+  // https://styled-components.com/docs/faqs#how-can-i-override-styles-with-higher-specificity
+  &&&.Toastify__toast-container {
+    z-index: 10;
+  }
+  .Toastify__toast {
+    z-index: 10;
+  }
+  .Toastify__toast-body {
+    z-index: 10;
+  }
+  .Toastify__progress-bar {
+    z-index: 10;
+  }
+`;
 
 export const pulse = keyframes` 
   0% {
@@ -30,12 +64,18 @@ export const Divloadf = styled.div`
   background-color: #ccc;
   z-index: 1;
   animation: ${pulse} 1.5s infinite;
+
+  @media screen and (max-width: 466px){
+    width: 43%;
+    height: 29%;
+    margin: 1vw;
+  }
 `
 export const BoxLoad = styled(Box)`
   &&{
     display: ${prop => prop.$act? 'none' : 'block' };
     position: absolute;
-    z-index: 4;
+    z-index: 7;
   }
 `
 export const FundoLoad = styled.div`
@@ -55,6 +95,14 @@ export const FundoLoadImg = styled.div`
   z-index: 3;
   display: none;
 
+`
+export const FundoExpanding = styled.div`
+  position: absolute;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0000004a;
+  z-index: 5;
 `
 export const BoxLoadImg = styled(Box)`
   &&{
@@ -156,8 +204,14 @@ margin: 10px;
 border-radius: 10px;
 cursor: pointer;
 `
+export const DivMainImg = styled.div`
+ display: flex;
+ align-items: center;
+ justify-content: center;
+
+`
 export const MainImage = styled.div`
-  width: 70%;
+  width: 100%;
   height: 100%;
   background-color: #323639;
   display: flex;
@@ -172,11 +226,13 @@ export const MainImage = styled.div`
 `
 export const ContainerImages = styled.div`
   display: flex;
+  justify-content: flex-start; /* Alinha os itens à esquerda */
   flex-wrap: wrap;
   overflow-y: scroll;
-  width: 100%;
-  height: 472px;
+  align-items: center;
   background-color: #454A4E;
+  width: 100%;
+  height: 61%;
   
   &::-webkit-scrollbar{ // Aditar scrollbar
     
@@ -186,13 +242,13 @@ export const ContainerImages = styled.div`
   }
 `
 export const ContainerScroll = styled.div`
-  width: 240px;
+  
+  /* width: 240px;
   height: 100%;
-  overflow-y:  hidden;
   @media screen and (max-width: 840px) {
     height: 92%;
     width: 100%;
-  } 
+  }  */
 `
 export const AlertBrowse = styled.div`
   display: none;
@@ -202,10 +258,7 @@ export const AlertBrowse = styled.div`
 `
 
 export const ItemList = styled.div`
- position: relative;
- flex-direction:column;
- overflow-y: scroll;
- height: 100%;
+  
 `
 export const ListContainer = styled.div`
   background-color: gray;
@@ -229,10 +282,29 @@ export const PictureContainer = styled.div`
   background-size: cover;
   margin: 10px;
   cursor: pointer;
+
+  @media screen and (max-width: 466px){
+    width: 43%;
+    height: 29%;
+    margin: 1vw;
+  }
+
+  @media screen and (min-width: 1350px){
+    width: 31%;
+    height: 47%;
+    margin: 1vw;
+    margin: 7px;
+  }
+  /* @media screen and (max-width: 1250px) and (){
+    width: 31%;
+    height: 30%;
+    margin: 1vw;
+    margin: 7px;
+  } */
 `
 export const Img = styled.img`
   width: 100%;
-  height: auto;
+  height: 100%;
   grid-row: 1/2;
   grid-column: 1/2;
   z-index: 2;
@@ -296,17 +368,43 @@ export const InputSerach = styled.input`
 export const BottonSerch = styled.a`
   padding: 6px;
   background-color: #fff;
+  color: #07406B;
   border-left: 1px solid #dbdbdb;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
 
 `
+export const CotainerMain = styled.div`
+  overscroll-behavior: auto;
+
+
+  /* Estilo para a barra de rolagem */
+::-webkit-scrollbar {
+  width: 1em;
+}
+
+/* Estilo para a área de fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #D9DEE0;
+  border-radius: 100vw;
+  margin-block: 10px;
+}
+
+/* Estilo para o polegar (thumb) da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background: #454A4E;
+  border-radius: 100vw;
+  border: 2px solid #D9DEE0;
+}
+
+`
 export const Expanding = styled.img`
   display: none;
   position: absolute;
-  width: 90%;
+  width: 97%;
   z-index: 6;
-  transform: rotate(90deg);
+  overflow-y: auto;
+  /* transform: rotate(90deg); */
   padding: -70px -70px;
   background-image: url(${props => props.$ActivPicture ? props.$ActivPicture : 'green'});
   background-size: contain;
@@ -314,7 +412,11 @@ export const Expanding = styled.img`
   background-position: center center;
   border: 1px solid black;
   margin: 10px;
-  box-shadow: 0px 0px 0 500px #000000a8;
+
+  @media screen and (min-width: 1020px) {
+    height: 80%;
+    width: 80%;
+  }
 
 `
 export const Rotation = styled.span`
@@ -399,29 +501,37 @@ export const Error =  styled.p`
   font-size: 13px;
   
 `
+export const AlertServicos = styled.div`
+  margin: 10px;
+  display: ${(prop) => prop.$Act == 0 ? 'block' : 'none'};
+`
+
 export const BAckTorow = styled.div`
 
 `
 export const ContenedorData = styled.div`
-   
-   @media screen and (max-width: 840px) {
-      height: 95%;
-   }
+  overflow-y: scroll;
+  @media screen and (max-width: 840px) {
+    height: 31%;
+  }
+  @media screen and (min-width: 840px) {
+    height: 90%;
+  }
 `
 export const InitContainerScroll = styled.div`
   height: 70px;
   margin: 5px;
+  
 `
 export const ExpandContainerscrooll = styled.div`
- 
- @media screen and (max-width: 840px) {
-  width: 60px;
-  height: 70px;
-  background-color: black;
- }
+ display: flex;
+ flex-direction: column;
+
+
   
 `
 export const FitaBAckScroll = styled.span`
+  display: none;
   @media screen and (max-width: 840px) {
     width: 53px;
     height: 50px;
@@ -486,6 +596,9 @@ export const VibrantBox = styled.div`
   height: 100%;
   display: block;
   z-index: 4;
+  overflow-y: auto;
+
+  
 
   @media screen and (max-width: 840px){
     display: block;
@@ -611,11 +724,12 @@ export const BottonCommit = styled.div`
   }
 `
 export const BackgroundBigImg = styled.div`
+  position: absolute;
+  background: #000000a8;
   display: ${props => props.$ActivPicture ? 'block' : 'none'};
   width: 100vw;
   height: 100vh;
   z-index: 5;
-  background-color: black;
 `
 export const BlockButton = styled.div`
   background-color: #ffffff96;
